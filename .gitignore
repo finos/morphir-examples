@@ -1,0 +1,14 @@
+# Node
+node_modules/
+dist/
+
+
+# Elm
+elm-stuff/
+.lobo/
+
+
+# Morphir
+morphir-interface.json
+morphir-implementation.json
+morphir-version.json

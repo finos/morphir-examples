@@ -1,0 +1,9 @@
+{
+  "name": "@morphir/morphir-examples",
+  "keywords": [
+    "morphir-model"
+  ],
+  "devDependencies": {
+    "@morphir/morphir-elm": "latest"
+  }
+}
