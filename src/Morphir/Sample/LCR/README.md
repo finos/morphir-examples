@@ -14,6 +14,8 @@ The U.S. LCR rules are specified and supported in a set of documents:
 This project implements a subset of the the rules pertaining to 5G and LCR.  The 5G is concerned with categorizing asset flows so that they can be appropriately handled in the various calculations.  Handling is usually in the form of inclusing in different calculated fields and applying weights to the category.  The LCR (high quality liquid asset amount / total net cash flow amount) is then calculated as a ratio of outflows to inflows and is one of the factors in determining the institution's health.
 
 ## Code Structure
+[View full project](https://github.com/Morgan-Stanley/morphir-examples/tree/master/src/Morphir/Sample/LCR)
+
 * *[Basics](Basics.elm)* - Various common types and the such.
 * *[Calculations](Calculations.elm)* - The LCR and 5G calculations.
 * *[Flows](Flows.elm)* - A common structure for the various flows.
