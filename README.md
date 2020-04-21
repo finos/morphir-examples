@@ -1,4 +1,4 @@
-![build-publish](https://github.com/Morgan-Stanley/morphir-examples/workflows/build-publish/badge.svg)
+![build-publish](https://github.com/Morgan-Stanley/morphir-examples/workflows/build-publish/badge.svg?branch=master)
 
 # Overview
 
