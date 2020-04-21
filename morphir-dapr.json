@@ -1,6 +1,6 @@
 {
   "name": "Company/Operations",
-  "sourceDirectories": ["src/Company"],
+  "sourceDirectories": ["src"],
   "exposedModules": [
     "BooksAndRecords"
   ]
