@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-publisher
+  labels:
+    app: node-publisher
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-publisher
+  template:
+    metadata:
+      labels:
+        app: node-publisher
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/id: "node-publisher"
+        dapr.io/port: "3000"
+    spec:
+      containers:
+        - name: node-publisher
+          image: daprapps.azurecr.io/node_publisher:latest
+          ports:
+            - containerPort: 3000
+          imagePullPolicy: Always

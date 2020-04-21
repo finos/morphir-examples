@@ -1,0 +1,42 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: books-and-records-app
+  labels:
+    app: books-and-records
+spec:
+  selector:
+    app: books-and-records
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+  type: LoadBalancer
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: books-and-records-app
+  labels:
+    app: books-and-records
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: books-and-records
+  template:
+    metadata:
+      labels:
+        app: books-and-records
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/id: "books-and-records"
+        dapr.io/port: "3000"
+    spec:
+      containers:
+        - name: books-and-records
+          image: daprapps.azurecr.io/books_and_records:9355b913ec196c3280c3931f45cb74177589b479
+          ports:
+            - containerPort: 3000
+          imagePullPolicy: IfNotPresent
