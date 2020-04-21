@@ -1,3 +1,5 @@
+![build-publish](https://github.com/Morgan-Stanley/morphir-examples/workflows/build-publish/badge.svg)
+
 # Overview
 
 This repo contains various models that represent the kinds of business problems that are common across enterprises like financial institutions.
