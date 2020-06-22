@@ -33,7 +33,7 @@ jobs:
     - name: Compile morphir application
       run: |
         npm install -g morphir-elm
-        morphir-dapr -d
+        morphir-dapr
     
     - name: Login to azure container registry
       uses: azure/docker-login@v1
