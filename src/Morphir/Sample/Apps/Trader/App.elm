@@ -3,7 +3,7 @@ module Morphir.Sample.Apps.Trader.App exposing (..)
 
 import Morphir.Sample.Apps.Trader.Logic exposing (..)
 import Dict exposing (Dict)
-import Morphir.SDK.App exposing (StatefulApp, statefulApp, cmdNone)
+import Morphir.SDK.StatefulApp exposing (StatefulApp, statefulApp, cmdNone)
 import Morphir.Sample.Apps.Shared.Product as Product
 import Morphir.Sample.Apps.BooksAndRecords.App as BookApp
 import Morphir.Sample.Apps.BooksAndRecords.Deal as Deal
