@@ -9,7 +9,7 @@ module Morphir.Sample.Apps.Order.App exposing
 
 
 import Dict exposing (Dict)
-import Morphir.SDK.App exposing (StatefulApp, statefulApp, cmdNone)
+import Morphir.SDK.StatefulApp exposing (StatefulApp, statefulApp, cmdNone)
 import Morphir.Sample.Apps.Shared.Product as Product
 import Morphir.Sample.Apps.BooksAndRecords.Deal as Deal
 import Morphir.Sample.Apps.Order.Order as Order
