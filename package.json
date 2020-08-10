@@ -4,6 +4,6 @@
     "morphir-model"
   ],
   "devDependencies": {
-    "@morphir/morphir-elm": "latest"
+    "morphir-elm": "latest"
   }
 }
