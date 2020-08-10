@@ -5,5 +5,8 @@
   ],
   "devDependencies": {
     "@morphir/morphir-elm": "latest"
+  },
+  "dependencies": {
+    "morphir-elm": "^0.6.0"
   }
 }
