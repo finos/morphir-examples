@@ -21,6 +21,9 @@ module Company.Operations.BooksAndRecords exposing (..)
 import Morphir.SDK.StatefulApp exposing (StatefulApp)
 
 
+{- Type aliases for modeling in the language of the business -}
+
+
 type alias ID =
     String
 
@@ -37,62 +40,82 @@ type alias Quantity =
     Int
 
 
+
+{- Identifies a structure that can be associated to a persistance entity -}
+
+
 type alias Deal =
-    { id : ID
-    , product : ProductID
+    { product : ProductID
     , price : Price
     , quantity : Quantity
     }
 
 
+
+{- These define the requests that can be made of this service -}
+
+
 type DealCmd
-    = OpenDeal ID ProductID Price Quantity
-    | CloseDeal ID
+    = OpenDeal ProductID Price Quantity
+    | CloseDeal ProductID
+
+
+
+{- These define the responses that would result from requests -}
 
 
 type DealEvent
-    = DealOpened ID ProductID Price Quantity
-    | DealClosed ID
-    | InvalidQuantity ID Quantity
-    | InvalidPrice ID Price
-    | DuplicateDeal ID
-    | DealNotFound ID
+    = DealOpened ProductID Price Quantity
+    | DealClosed ProductID
+    | InvalidQuantity Quantity
+    | InvalidPrice Price
+    | DuplicateDeal ProductID
+    | DealNotFound ProductID
 
 
-type alias App =
-    StatefulApp ID DealCmd Deal DealEvent
+
+{- Defines that this is a stateful application that uses ID as the entity key (for possible partioning),
+   accepts requests of type DealCmd,
+   manages data in the form of a Deal,
+   and produces events of type DealEvent.
+
+   Note that there's no indication of whether the API is synchronous or asynchronous.  That's up to the implementation to decide.
+-}
+{- Defines the business logic of this app.
+   That is whether or not to accept a request to open or close a deal.
+-}
 
 
-app : App
-app =
-    StatefulApp logic
-
-
-logic : ID -> Maybe Deal -> DealCmd -> ( ID, Maybe Deal, DealEvent )
-logic dealId deal dealCmd =
-    case deal of
+logic : Maybe Deal -> DealCmd -> ( Maybe Deal, DealEvent )
+logic dealState dealCmd =
+    -- Act accordingly based on whether the deal already exists.
+    case dealState of
         Just _ ->
             case dealCmd of
-                CloseDeal _ ->
-                    ( dealId, Nothing, DealClosed dealId )
+                CloseDeal p ->
+                    ( Nothing, DealClosed p )
 
-                OpenDeal _ _ _ _ ->
-                    ( dealId, deal, DuplicateDeal dealId )
+                OpenDeal p _ _ ->
+                    ( dealState, DuplicateDeal p )
 
         Nothing ->
             case dealCmd of
-                OpenDeal id productId price qty ->
+                OpenDeal productId price qty ->
                     if price < 0 then
-                        ( dealId, deal, InvalidPrice id price )
+                        ( dealState, InvalidPrice price )
 
                     else if qty < 0 then
-                        ( dealId, deal, InvalidQuantity id qty )
+                        ( dealState, InvalidQuantity qty )
 
                     else
-                        ( dealId
-                        , Deal id productId price qty |> Just
-                        , DealOpened id productId price qty
+                        ( Deal productId price qty |> Just
+                        , DealOpened productId price qty
                         )
 
-                CloseDeal _ ->
-                    ( dealId, deal, DealNotFound dealId )
+                CloseDeal p ->
+                    ( dealState, DealNotFound p)
+
+
+app : StatefulApp ID DealCmd Deal DealEvent
+app =
+    StatefulApp logic
