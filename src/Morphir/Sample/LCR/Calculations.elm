@@ -30,27 +30,17 @@ import Morphir.Sample.LCR.Rules as Rules
 -- Forumulas from the OCC: https://www.occ.gov/news-issuances/bulletins/2014/bulletin-2014-51.html
 --  https://www.occ.gov/topics/supervision-and-examination/capital-markets/balance-sheet-management/liquidity/Basel-III-LCR-Formulas.pdf
 --  https://www.govinfo.gov/content/pkg/FR-2014-10-10/pdf/2014-22520.pdf (page 61477)
-
 {-| This module is broken up into the same structure as the example formulas in the referenced PDF. -}
 
-isMember : Maybe a -> List a -> Bool
-isMember ruleM rules =
-    ruleM
-    |> Maybe.map (\r -> List.member r rules)
-    |> Maybe.withDefault False
 
-isHQLA : (ProductId -> Product) -> Flow -> Bool
-isHQLA product flow =
-    (product flow.productId) |> .isHQLA
-
-
-{-| Helper function to accumulated steps of a sum across a list. This is used in calculating the maturity mismatch add-on. -}
-accumulate starter list =
-    let 
-        (sum, acc) =
-            List.foldl ( \y (x,xs) -> (x+y, (x+y) :: xs)) (starter, []) list
+{-| Here's the LCR as it's commonly known. -}
+lcr : (Flow -> Counterparty) -> (ProductId -> Product) -> Date -> (Date -> List Flow) -> Decimal -> Decimal
+lcr toCounterparty product t flowsForDate reserveBalanceRequirement = 
+    let
+        hqla                = hqlaAmount product (flowsForDate t) reserveBalanceRequirement
+        totalNetCashOutflow = totalNetCashOutflowAmount toCounterparty t flowsForDate
     in
-        List.reverse acc
+        hqla / totalNetCashOutflow
 
 
 {-| HQLA Amount is the LCR numerator. It has several components, which are specified as nested functions. -}
@@ -220,11 +210,22 @@ totalNetCashOutflowAmount toCounterparty t flowsForDate =
     aggregatedOutflowAmount - cappedInflows + maturityMismatchAddOn
 
 
-{-| Woohoo.  Here's the LCR. -}
-lcr : (Flow -> Counterparty) -> (ProductId -> Product) -> Date -> (Date -> List Flow) -> Decimal -> Decimal
-lcr toCounterparty product t flowsForDate reserveBalanceRequirement = 
-    let
-        hqla                = hqlaAmount product (flowsForDate t) reserveBalanceRequirement
-        totalNetCashOutflow = totalNetCashOutflowAmount toCounterparty t flowsForDate
+
+isMember : Maybe a -> List a -> Bool
+isMember ruleM rules =
+    ruleM
+    |> Maybe.map (\r -> List.member r rules)
+    |> Maybe.withDefault False
+
+isHQLA : (ProductId -> Product) -> Flow -> Bool
+isHQLA product flow =
+    (product flow.productId) |> .isHQLA
+
+
+{-| Helper function to accumulated steps of a sum across a list. This is used in calculating the maturity mismatch add-on. -}
+accumulate starter list =
+    let 
+        (sum, acc) =
+            List.foldl ( \y (x,xs) -> (x+y, (x+y) :: xs)) (starter, []) list
     in
-        hqla / totalNetCashOutflow
+        List.reverse acc
