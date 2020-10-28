@@ -1,0 +1,9 @@
+{
+  "name": "Morphir/Sample",
+  "sourceDirectory": "src",
+  "exposedModules": [
+    "BooksAndRecords"
+    , "LCR/MaturityBucket"
+    , "LCR/Calculations"
+  ]
+}
