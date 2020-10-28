@@ -17,15 +17,16 @@ limitations under the License.
 module Morphir.Sample.LCR.Rules exposing (..)
 
 
-import Morphir.SDK.Basics exposing (Decimal)
 import Morphir.Sample.LCR.Basics exposing (..)
 import Morphir.Sample.LCR.Flows exposing (..)
 import Morphir.Sample.LCR.Counterparty exposing (..)
 
 
+type alias Weight = Float
+
 type alias Rule a =
     { name : String
-    , weight : Decimal
+    , weight : Weight
     , applies : a -> Bool
     }
 

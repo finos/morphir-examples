@@ -18,7 +18,6 @@ module Morphir.Sample.LCR.Outflows exposing (..)
 
 
 import Dict exposing (Dict)
-import Morphir.SDK.Basics exposing (Decimal)
 import Date exposing (Date, Interval(..), Unit(..))
 
 import Morphir.Sample.LCR.Basics exposing (..)

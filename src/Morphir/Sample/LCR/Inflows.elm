@@ -17,7 +17,6 @@ limitations under the License.
 module Morphir.Sample.LCR.Inflows exposing (..)
 
 
-import Morphir.SDK.Basics exposing (Decimal)
 import Date exposing (Date, Interval(..), Unit(..))
 import Morphir.Sample.LCR.Basics exposing (..)
 import Morphir.Sample.LCR.Flows exposing (..)
