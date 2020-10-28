@@ -17,7 +17,6 @@ limitations under the License.
 module Morphir.Sample.LCR.Calculations exposing (..)
 
 
-import Morphir.SDK.Basics exposing (Decimal, max, min)
 import Date exposing (Date, Interval(..), Unit(..))
 import Morphir.Sample.LCR.Basics exposing (..)
 import Morphir.Sample.LCR.Flows exposing (..)
@@ -30,11 +29,11 @@ import Morphir.Sample.LCR.Rules as Rules
 -- Forumulas from the OCC: https://www.occ.gov/news-issuances/bulletins/2014/bulletin-2014-51.html
 --  https://www.occ.gov/topics/supervision-and-examination/capital-markets/balance-sheet-management/liquidity/Basel-III-LCR-Formulas.pdf
 --  https://www.govinfo.gov/content/pkg/FR-2014-10-10/pdf/2014-22520.pdf (page 61477)
-{-| This module is broken up into the same structure as the example formulas in the referenced PDF. -}
+-- {-| This module is broken up into the same structure as the example formulas in the referenced PDF. -}
 
 
-{-| Here's the LCR as it's commonly known. -}
-lcr : (Flow -> Counterparty) -> (ProductId -> Product) -> Date -> (Date -> List Flow) -> Decimal -> Decimal
+-- {-| Here's the LCR as it's commonly known. -}
+lcr : (Flow -> Counterparty) -> (ProductId -> Product) -> Date -> (Date -> List Flow) -> Balance -> Ratio
 lcr toCounterparty product t flowsForDate reserveBalanceRequirement = 
     let
         hqla                = hqlaAmount product (flowsForDate t) reserveBalanceRequirement
@@ -44,7 +43,7 @@ lcr toCounterparty product t flowsForDate reserveBalanceRequirement =
 
 
 {-| HQLA Amount is the LCR numerator. It has several components, which are specified as nested functions. -}
-hqlaAmount : (ProductId -> Product) -> List Flow -> Decimal -> Decimal
+hqlaAmount : (ProductId -> Product) -> List Flow -> Balance -> Ratio
 hqlaAmount product t0Flows reserveBalanceRequirement =
     let
         level1LiquidAssetsThatAreEligibleHQLA =
@@ -112,7 +111,7 @@ hqlaAmount product t0Flows reserveBalanceRequirement =
     the date (t) from which to calculate the remaining days until the flows maturity
     and a function takes a function to lookup flows for a given date, 
 -}
-totalNetCashOutflowAmount : (Flow -> Counterparty) -> Date -> (Date -> List Flow) -> Decimal
+totalNetCashOutflowAmount : (Flow -> Counterparty) -> Date -> (Date -> List Flow) -> Ratio
 totalNetCashOutflowAmount toCounterparty t flowsForDate =
     let
         -- List of the next 30 days from t

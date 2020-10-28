@@ -16,8 +16,6 @@ limitations under the License.
 
 module Morphir.Sample.LCR.Flows exposing (..)
 
-
-import Morphir.SDK.Basics exposing (Decimal)
 import Date exposing (Date, Interval(..), Unit(..))
 import Morphir.Sample.LCR.Basics exposing (..)
 import Morphir.Sample.LCR.Counterparty exposing (CounterpartyId)
@@ -31,8 +29,10 @@ type alias BusinessDate = Date
 type alias ReportingEntity = Entity
 
 
+type alias Amount = Float
+
 type alias Flow =
-    { amount : Decimal
+    { amount : Amount
     , assetType : AssetCategoryCodes
     , businessDate : BusinessDate
     , collateralClass : AssetCategoryCodes

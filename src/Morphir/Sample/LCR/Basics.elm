@@ -19,12 +19,10 @@ module Morphir.Sample.LCR.Basics exposing
     , InsuranceType(..)
     , Entity
     , Currency
+    , Balance
+    , Ratio
     , Fed5GCode
     )
-
-
-import Date exposing (Date, Unit(..))
-import Time exposing (Month(..))
 
 {-| Asset categories apply to the flows and are specified in the spec.  
     There are a bunch of them, but we're only concerned with these three in this example .
@@ -47,6 +45,12 @@ type alias Entity = String
 
 
 type alias Currency = String
+
+
+type alias Balance = Float
+
+
+type alias Ratio = Float
 
 
 type alias Fed5GCode = String

@@ -32,18 +32,24 @@ type MaturityBucket
     | Residual
 
 
+daysToMaturity : Date -> Date -> Int
 daysToMaturity fromDate maturityDate =
     Date.diff Days maturityDate fromDate
 
 
+yearsToMaturity : Date -> Date -> Int
 yearsToMaturity fromDate maturityDate =
     Date.diff Years maturityDate fromDate
 
 
 {-| The Fed spec on maturity buckets -}
+bucket : Date -> Date -> MaturityBucket
 bucket fromDate maturityDate =
     let
+        days : Int
         days = daysToMaturity fromDate maturityDate
+        
+        years : Int
         years = yearsToMaturity maturityDate fromDate
     in 
     if days <= 60 then
