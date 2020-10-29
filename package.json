@@ -7,6 +7,6 @@
     "@morphir/morphir-elm": "latest"
   },
   "dependencies": {
-    "morphir-elm": "latest"
+    "morphir-elm": "^1.5.0"
   }
 }
