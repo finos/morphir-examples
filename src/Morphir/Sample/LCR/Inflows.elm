@@ -17,7 +17,7 @@ limitations under the License.
 module Morphir.Sample.LCR.Inflows exposing (..)
 
 
-import Date exposing (Date, Interval(..), Unit(..))
+import Morphir.SDK.LocalDate exposing (LocalDate)
 import Morphir.Sample.LCR.Basics exposing (..)
 import Morphir.Sample.LCR.Flows exposing (..)
 import Morphir.Sample.LCR.Counterparty exposing (..)
@@ -26,7 +26,7 @@ import Morphir.Sample.LCR.MaturityBucket exposing (..)
 
 
 {-| The list of all rules pertaining to inflows. -}
-inflowRules : (Flow -> Counterparty) -> Date -> List (Rule Flow)
+inflowRules : (Flow -> Counterparty) -> LocalDate -> List (Rule Flow)
 inflowRules toCounterparty t = 
     [ Rule "20(a)(1)" 1.0 (isRule20a1 t)
     , Rule "20(a)(3)-(6)" 1.0 isRule20a3dash6
@@ -46,7 +46,7 @@ inflowRules toCounterparty t =
 
 -- Rule logic is below for (eventual) unit testability
 
-isRule20a1 : Date -> Flow -> Bool
+isRule20a1 : LocalDate -> Flow -> Bool
 isRule20a1 t flow =
     List.member flow.fed5GCode ["I.A.3.1", "I.A.3.2", "I.A.3.3", "I.A.3.4", "I.A.3.5", "I.A.3.6", "I.A.3.7", "I.A.3.8"]
     && daysToMaturity t flow.maturityDate == 0
@@ -68,14 +68,17 @@ isRule20a3dash6 flow =
     )
 
 
+isRule22b3L2a : Flow -> Bool
 isRule22b3L2a flow =
     flow.fed5GCode == "S.I.19" && flow.collateralClass == Level2aAssets
 
 
+isRule22b3L2b : Flow -> Bool
 isRule22b3L2b flow =
     flow.fed5GCode == "S.I.19" && flow.collateralClass == Level2bAssets
 
 
+isRule20b : Flow -> Bool
 isRule20b flow =
     (
         List.member flow.fed5GCode ["I.A.1", "I.A.2"]
@@ -90,6 +93,7 @@ isRule20b flow =
         && flow.isUnencumbered
     )
 
+isRule20c : Flow -> Bool
 isRule20c flow =
     (
         List.member flow.fed5GCode ["I.A.1", "I.A.2"]
@@ -104,13 +108,18 @@ isRule20c flow =
         && flow.isUnencumbered
     )
 
+isRule33b : { a | fed5GCode : String } -> Bool
 isRule33b cashflow =
     cashflow.fed5GCode == "1.O.7"
 
 
+isRule33c : (Flow -> Counterparty) -> LocalDate -> Flow -> Bool
 isRule33c toCounterparty t flow =
     let
+        cpty : Counterparty
         cpty = toCounterparty flow
+
+        days : Int
         days = daysToMaturity t flow.maturityDate
     in
     ( 
@@ -125,8 +134,10 @@ isRule33c toCounterparty t flow =
             && (0 < days && days <= 30)
     )
 
+isRule33d1 : (Flow -> Counterparty) -> Flow -> Bool
 isRule33d1 toCounterparty flow =
     let
+        cpty : Counterparty
         cpty = toCounterparty flow
     in
     List.member flow.fed5GCode ["I.U.1", "I.U.2", "I.U.4"]
@@ -142,8 +153,10 @@ isRule33d1 toCounterparty flow =
         )
 
 
+isRule33d2 : (Flow -> Counterparty) -> Flow -> Bool
 isRule33d2 toCounterparty flow =
     let
+        cpty : Counterparty
         cpty =  toCounterparty flow
     in
     List.member flow.fed5GCode ["I.U.5", "I.U.6"]
@@ -157,14 +170,18 @@ isRule33d2 toCounterparty flow =
             , Other
             ]
 
+isRule33e : Flow -> Bool
 isRule33e cashflow =
     cashflow.fed5GCode == "I.O.6" || cashflow.fed5GCode == "I.O.8"
 
-isRule33f flow =
-    Debug.todo "Rule 33(f) is actually a bunch of rules. Too many to do for now..."
+-- isRule33f : a -> b
+-- isRule33f flow =
+--     Debug.todo "Rule 33(f) is actually a bunch of rules. Too many to do for now..."
 
+isRule33g : { a | fed5GCode : String, isTreasuryControl : Bool } -> Bool
 isRule33g cashflow =
     cashflow.fed5GCode == "I.O.5" && cashflow.isTreasuryControl
 
+isRule33h : { a | fed5GCode : String, isTreasuryControl : Bool } -> Bool
 isRule33h cashflow =
     cashflow.fed5GCode == "I.O.9" && cashflow.isTreasuryControl

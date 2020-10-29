@@ -20,8 +20,7 @@ module Morphir.Sample.LCR.MaturityBucket exposing (..)
 -- See: https://www.federalreserve.gov/reportforms/forms/FR_2052a20190331_f.pdf
 -- Appendix IV-a, Maturity Time Bucket Value List on page 75
 
-import Date exposing (Date, Unit(..))
-import Time exposing (Month(..))
+import Morphir.SDK.LocalDate exposing (LocalDate, diffInDays, diffInYears)
 
 
 type MaturityBucket 
@@ -32,18 +31,18 @@ type MaturityBucket
     | Residual
 
 
-daysToMaturity : Date -> Date -> Int
+daysToMaturity : LocalDate -> LocalDate -> Int
 daysToMaturity fromDate maturityDate =
-    Date.diff Days maturityDate fromDate
+    diffInDays maturityDate fromDate
 
 
-yearsToMaturity : Date -> Date -> Int
+yearsToMaturity : LocalDate -> LocalDate -> Int
 yearsToMaturity fromDate maturityDate =
-    Date.diff Years maturityDate fromDate
+    diffInYears maturityDate fromDate
 
 
 {-| The Fed spec on maturity buckets -}
-bucket : Date -> Date -> MaturityBucket
+bucket : LocalDate -> LocalDate -> MaturityBucket
 bucket fromDate maturityDate =
     let
         days : Int
