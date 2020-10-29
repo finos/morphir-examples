@@ -17,12 +17,10 @@ limitations under the License.
 module Morphir.Sample.LCR.Outflows exposing (..)
 
 
-import Dict exposing (Dict)
-import Date exposing (Date, Interval(..), Unit(..))
+-- import Dict exposing (Dict)
+import Morphir.SDK.LocalDate exposing (LocalDate)
 
 import Morphir.Sample.LCR.Basics exposing (..)
-import Morphir.Sample.LCR.Basics exposing (InsuranceType(..), AssetCategoryCodes(..))
-import Morphir.Sample.LCR.Basics exposing (InsuranceType, AssetCategoryCodes)
 import Morphir.Sample.LCR.Flows exposing (..)
 import Morphir.Sample.LCR.Counterparty exposing (..)
 import Morphir.Sample.LCR.MaturityBucket exposing (..)
@@ -30,6 +28,7 @@ import Morphir.Sample.LCR.Rules exposing (..)
 
 
 {-| The list of all rules pertaining to outlfows. -}
+outflowRules :  (Flow -> Counterparty) -> LocalDate -> List (Rule Flow)
 outflowRules counterparty t = 
     [ Rule "32(a)(1)" 0.03 isRule32a1
     , Rule "32(a)(2)" 0.1 (isRule32a2 counterparty)
@@ -68,6 +67,7 @@ isRule32a1 flow =
 isRule32a2 : (Flow -> Counterparty) -> Flow -> Bool
 isRule32a2 counterparty flow =
     let
+        cpty : Counterparty
         cpty = counterparty flow
     in
     (
@@ -85,6 +85,7 @@ isRule32a2 counterparty flow =
 isRule32a3 : (Flow -> Counterparty) -> Flow -> Bool
 isRule32a3 counterparty flow =
     let
+        cpty : Counterparty
         cpty = counterparty flow
     in
     flow.fed5GCode == "O.D.12"
@@ -95,6 +96,7 @@ isRule32a3 counterparty flow =
 isRule32a4 : (Flow -> Counterparty) -> Flow -> Bool
 isRule32a4 counterparty flow =
     let
+        cpty : Counterparty
         cpty = counterparty flow
     in
     flow.fed5GCode == "O.D.12"
@@ -105,6 +107,7 @@ isRule32a4 counterparty flow =
 isRule32a5 : (Flow -> Counterparty) -> Flow -> Bool
 isRule32a5 counterparty flow =
     let
+        cpty : Counterparty
         cpty = counterparty flow
     in
     List.member flow.fed5GCode ["O.D.13", "O.W.18"]
@@ -136,28 +139,33 @@ isRule32f flow =
   flow.fed5GCode == "O.O.6"
 
 
-isRule32g1 : (Flow -> Counterparty) -> Date -> Flow -> Bool
+isRule32g1 : (Flow -> Counterparty) -> LocalDate -> Flow -> Bool
 isRule32g1 counterparty t flow = 
     let
+        cpty : Counterparty
         cpty = counterparty flow
+
+        remainingDays : Int
         remainingDays = daysToMaturity t flow.maturityDate
     in
     flow.fed5GCode == "O.D.7" 
         && (cpty.counterpartyType == Retail || cpty.counterpartyType == SmallBusiness)  
         && (0 < remainingDays && remainingDays <= 30)
 
-isRule32g2 : (Flow -> Counterparty) -> Date -> Flow -> Bool
+isRule32g2 : (Flow -> Counterparty) -> LocalDate -> Flow -> Bool
 isRule32g2 counterparty t flow = 
     let
+        cpty : Counterparty
         cpty = counterparty flow
     in
     flow.fed5GCode == "O.D.7" 
         && (cpty.counterpartyType == Retail || cpty.counterpartyType == SmallBusiness)  
         && daysToMaturity t flow.maturityDate <= 30
 
-isRule32g3 : (Flow -> Counterparty) -> Date -> Flow -> Bool
+isRule32g3 : (Flow -> Counterparty) -> LocalDate -> Flow -> Bool
 isRule32g3 counterparty t flow = 
     let
+        cpty : Counterparty
         cpty = counterparty flow
     in
     flow.fed5GCode == "O.D.7" 
@@ -165,9 +173,10 @@ isRule32g3 counterparty t flow =
         && daysToMaturity t flow.maturityDate == 0
         && flow.insured == FDIC
 
-isRule32g4 : (Flow -> Counterparty) -> Date -> Flow -> Bool
+isRule32g4 : (Flow -> Counterparty) -> LocalDate -> Flow -> Bool
 isRule32g4 counterparty t flow = 
     let
+        cpty : Counterparty
         cpty = counterparty flow
     in
     flow.fed5GCode == "O.D.7" 
@@ -178,6 +187,7 @@ isRule32g4 counterparty t flow =
 isRule32g5 : (Flow -> Counterparty) -> Flow -> Bool
 isRule32g5 counterparty flow = 
     let
+        cpty : Counterparty
         cpty = counterparty flow
     in
     flow.fed5GCode == "O.D.11" 
@@ -187,6 +197,7 @@ isRule32g5 counterparty flow =
 isRule32g6 : (Flow -> Counterparty) -> Flow -> Bool
 isRule32g6 counterparty flow = 
     let
+        cpty : Counterparty
         cpty = counterparty flow
     in
     flow.fed5GCode == "O.D.11" 
@@ -196,6 +207,7 @@ isRule32g6 counterparty flow =
 isRule32g7 : (Flow -> Counterparty) -> Flow -> Bool
 isRule32g7 counterparty flow = 
     let
+        cpty : Counterparty
         cpty = counterparty flow
     in
     flow.fed5GCode == "O.D.8" 
@@ -205,6 +217,7 @@ isRule32g7 counterparty flow =
 isRule32g8 : (Flow -> Counterparty) -> Flow -> Bool
 isRule32g8 counterparty flow = 
     let
+        cpty : Counterparty
         cpty = counterparty flow
     in
     flow.fed5GCode == "O.D.9"
@@ -214,6 +227,7 @@ isRule32g8 counterparty flow =
 isRule32g9 : (Flow -> Counterparty) -> Flow -> Bool
 isRule32g9 counterparty flow = 
     let
+        cpty : Counterparty
         cpty = counterparty flow
     in
     (flow.fed5GCode == "O.D.8" || flow.fed5GCode == "O.D.9") 
@@ -221,19 +235,20 @@ isRule32g9 counterparty flow =
         && flow.insured /= FDIC
 
 
-isRule32h1 : Flow -> Bool
-isRule32h1 flow =
-    Debug.todo "Too many 32(h) rules to do..."
+-- isRule32h1 : Flow -> Bool
+-- isRule32h1 flow =
+--     Debug.todo "Too many 32(h) rules to do..."
 
 
-isRule32h2 : Flow -> Bool
-isRule32h2 flow =
-    Debug.todo "Too many 32(h) rules to do..."
+-- isRule32h2 : Flow -> Bool
+-- isRule32h2 flow =
+--     Debug.todo "Too many 32(h) rules to do..."
 
 
 isRule32h3 : (Flow -> Counterparty) -> Flow -> Bool
 isRule32h3 counterparty flow =
     let
+        cpty : Counterparty
         cpty = counterparty flow
     in
     flow.fed5GCode == "O.D.4"
@@ -257,6 +272,7 @@ isRule32h3 counterparty flow =
 isRule32h4 : (Flow -> Counterparty) -> Flow -> Bool
 isRule32h4 counterparty flow =
     let
+        cpty : Counterparty
         cpty = counterparty flow
     in
     flow.fed5GCode == "O.D.4"
@@ -277,24 +293,24 @@ isRule32h4 counterparty flow =
         && flow.insured /= FDIC
 
 
-isRule32h5 : Flow -> Bool
-isRule32h5 flow =
-    Debug.todo "Too many 32(h) rules to do..."
+-- isRule32h5 : Flow -> Bool
+-- isRule32h5 flow =
+--     Debug.todo "Too many 32(h) rules to do..."
 
 
-isRule32i : Flow -> Bool
-isRule32i flow =
-    Debug.todo "Too many 32(i) rules to do..."
+-- isRule32i : Flow -> Bool
+-- isRule32i flow =
+--     Debug.todo "Too many 32(i) rules to do..."
 
 
-isRule32j : Flow -> Bool
-isRule32j flow =
-    Debug.todo "Too many 32(j) rules to do..."
+-- isRule32j : Flow -> Bool
+-- isRule32j flow =
+--     Debug.todo "Too many 32(j) rules to do..."
 
 
-isRule32k : Flow -> Bool
-isRule32k flow =
-    Debug.todo "Too many 32(k) rules to do..."
+-- isRule32k : Flow -> Bool
+-- isRule32k flow =
+--     Debug.todo "Too many 32(k) rules to do..."
 
 
 isRule32l : Flow -> Bool
@@ -302,9 +318,10 @@ isRule32l flow =
     flow.fed5GCode == "O.O.22"
 
 
-isRule33f1iii : Date -> Flow -> Bool
+isRule33f1iii : LocalDate -> Flow -> Bool
 isRule33f1iii t flow = 
     let
+        days : Int
         days = daysToMaturity t flow.effectiveMaturityDate
     in
     List.member flow.fed5GCode ["I.S.1", "I.S.2", "I.S.5", "I.S.6", "I.S.7"]
@@ -312,9 +329,10 @@ isRule33f1iii t flow =
     && (0 < days && days <= 30) 
 
 
-isRule33f1iv : Date -> Flow -> Bool
+isRule33f1iv : LocalDate -> Flow -> Bool
 isRule33f1iv t flow = 
     let
+        days : Int
         days = daysToMaturity t flow.effectiveMaturityDate
     in
     List.member flow.fed5GCode ["I.S.1", "I.S.2", "I.S.5", "I.S.6", "I.S.7"]

@@ -16,14 +16,15 @@ limitations under the License.
 
 module Morphir.Sample.LCR.Flows exposing (..)
 
-import Date exposing (Date, Interval(..), Unit(..))
+import Morphir.SDK.LocalDate exposing (LocalDate)
 import Morphir.Sample.LCR.Basics exposing (..)
 import Morphir.Sample.LCR.Counterparty exposing (CounterpartyId)
 import Morphir.Sample.LCR.Product exposing (ProductId)
 import Morphir.Sample.LCR.MaturityBucket as MB
 
 
-type alias BusinessDate = Date
+
+type alias BusinessDate = LocalDate
 
 
 type alias ReportingEntity = Entity
@@ -42,7 +43,7 @@ type alias Flow =
     , insured : InsuranceType
     , isTreasuryControl : Bool
     , isUnencumbered : Bool
-    , maturityDate : Date
-    , effectiveMaturityDate : Date
+    , maturityDate : BusinessDate
+    , effectiveMaturityDate : BusinessDate
     , productId : ProductId
     }
