@@ -15,3 +15,5 @@ morphir-version.json
 
 .fake
 .ionide
+
+*.iml

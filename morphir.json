@@ -4,5 +4,6 @@
   "exposedModules": [
     "BooksAndRecords"
     , "LCR/Calculations"
+    , "CDM/"
   ]
 }
