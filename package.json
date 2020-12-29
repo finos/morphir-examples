@@ -1,12 +1,11 @@
 {
   "name": "@morphir/morphir-examples",
   "keywords": [
-    "morphir-model"
+    "morphir"
+    ,"elm"
   ],
   "devDependencies": {
-    "@morphir/morphir-elm": "latest"
+    "morphir-elm": "^2.4.1"
   },
-  "dependencies": {
-    "morphir-elm": "^1.5.0"
-  }
+  "dependencies": {}
 }
