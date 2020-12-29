@@ -1,7 +1,7 @@
 # Node
 node_modules/
 dist/
-
+.idea/
 
 # Elm
 elm-stuff/
