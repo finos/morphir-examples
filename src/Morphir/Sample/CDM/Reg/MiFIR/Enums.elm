@@ -1,14 +1,6 @@
 module Morphir.Sample.CDM.Reg.MiFIR.Enums exposing (..)
 
 
-type UnitEnum
-    = MWH
-    | MMBTU
-    | BBL
-    | GAL
-    | BSH
-
-
 type PriceExpressionEnum
     = AbsoluteTerms
     | PercentageOfNotional

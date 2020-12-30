@@ -11,6 +11,16 @@ exists m =
             True
 
 
+flatMap : (a -> Maybe b) -> Maybe a -> Maybe b
+flatMap f maybe =
+    case maybe of
+        Just value ->
+            f value
+
+        Nothing ->
+            Nothing
+
+
 type alias Number =
     Float
 
