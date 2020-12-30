@@ -71,7 +71,7 @@ type alias EconomicTerms =
 
 type alias Payout =
     { interestRatePayout : Maybe InterestRatePayout
-    , crediteDefaultPayout : Maybe CreditDefaultPayout
+    , creditDefaultPayout : Maybe CreditDefaultPayout
     }
 
 
@@ -167,10 +167,19 @@ fixedFixedPrice trade =
 isFixedFloat : Trade -> Bool
 isFixedFloat trade =
     let
-    List.length trade.tradableProduct.product.contractualProduct.economicTerms.payout.interestRatePayout.rateSpecification.fixedRate
-        == 1
-        && List.length trade.tradableProduct.product.contractualProduct.economicTerms.payout.interestRatePayout.rateSpecification.floatingRate
-        == 1
+        fixedCount =
+            trade.tradableProduct.product.contractualProduct.economicTerms.payout.interestRatePayout
+                |> Maybe.map (\x -> x.rateSpecification.fixedRate)
+                |> Maybe.withDefault []
+                |> List.length
+
+        floatingCount =
+            trade.tradableProduct.product.contractualProduct.economicTerms.payout.interestRatePayout
+                |> Maybe.map (\x -> x.rateSpecification.floatingRate)
+                |> Maybe.withDefault []
+                |> List.length
+    in
+    fixedCount == 1 && floatingCount == 1
 
 
 fixedFloatPrice : Trade -> Maybe Float
@@ -188,7 +197,14 @@ fixedFloatPrice trade =
 
 isIRSwapBasis : Trade -> Bool
 isIRSwapBasis trade =
-    List.length trade.tradableProduct.product.contractualProduct.economicTerms.payout.interestRatePayout.rateSpecification.floatingRate == 2
+    let
+        count =
+            trade.tradableProduct.product.contractualProduct.economicTerms.payout.interestRatePayout
+                |> Maybe.map (\x -> x.rateSpecification.floatingRate)
+                |> Maybe.withDefault []
+                |> List.length
+    in
+    count == 2
 
 
 basisSwapPrice : Trade -> Maybe Float
@@ -205,20 +221,42 @@ basisSwapPrice trade =
 
 isCreditDefaultSwap : Trade -> Bool
 isCreditDefaultSwap trade =
-    trade |> .tradableProduct |> .product |> .contractualProduct |> .economicTerms |> .payout |> .creditDefaultPayout |> exists
+    trade.tradableProduct.product.contractualProduct.economicTerms.payout.creditDefaultPayout |> exists
 
 
 cdsPrice : Trade -> Maybe Float
 cdsPrice trade =
     let
-        p =
-            trade.tradableProduct.priceNotation.price
-    in
-    if p.fixedInterestRate.rate /= 0 then
-        p.fixedInterestRate.rate
+        mp =
+            trade.tradableProduct.priceNotation
+                |> List.head
+                |> Maybe.map .price
 
-    else
-        p.floatingInterestRate.initialRate
+        fixedRate =
+            mp
+                |> Maybe.map .fixedInterestRate
+                |> Maybe.withDefault Nothing
+                |> Maybe.map .rate
+
+        floatingRate =
+            mp
+                |> Maybe.map .floatingInterestRate
+                |> Maybe.withDefault Nothing
+                |> Maybe.map .initialRate
+    in
+    case ( fixedRate, floatingRate ) of
+        ( Just rate, _ ) ->
+            if rate /= 0 then
+                Just rate
+
+            else
+                Nothing
+
+        ( _, Just (Just initialRate) ) ->
+            Just initialRate
+
+        _ ->
+            Just 0
 
 
 exists : Maybe a -> Bool
