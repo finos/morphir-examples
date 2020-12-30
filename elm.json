@@ -11,7 +11,8 @@
             "elm/html": "1.0.0",
             "elm/time": "1.0.0",
             "finos/morphir-elm": "7.1.0",
-            "justinmimbs/date": "3.2.1"
+            "justinmimbs/date": "3.2.1",
+            "mgold/elm-nonempty-list": "4.1.0"
         },
         "indirect": {
             "avh4/elm-fifo": "1.0.4",
