@@ -17,56 +17,19 @@
 
 module Morphir.Sample.CDM.Reg.MiFIR.RTS22 exposing (..)
 
+import Company.Operations.BooksAndRecords exposing (Quantity)
 import List.Nonempty as Nonempty exposing (Nonempty)
 import Morphir.SDK.LocalDate exposing (LocalDate)
 import Morphir.Sample.CDM.Reg.MiFIR.AncillaryRoleEnum exposing (AncillaryRoleEnum)
 import Morphir.Sample.CDM.Reg.MiFIR.Basics exposing (..)
 import Morphir.Sample.CDM.Reg.MiFIR.Enums exposing (..)
 import Morphir.Sample.CDM.Reg.MiFIR.FloatingRateIndexEnum exposing (FloatingRateIndexEnum(..))
+import Morphir.Sample.CDM.Reg.MiFIR.Quantities exposing (NonNegativeQuantity)
+import Morphir.Sample.LCR.Flows exposing (Amount)
 
 
-type alias Report =
-    { price : Price
 
-    --, reportStatus : ReportStatus
-    --, transactionReferenceNumber : TransactionReferenceNumber
-    --, tradingVenueTransactionIdentificationCode : TradingVenueTransactionIdentificationCode
-    --, executingEntityIdentificationCode : ExecutingEntityIdentificationCode
-    --, isInvestmentFirm : IsInvestmentFirm
-    --, submittingEntityIdentificationCode : SubmittingEntityIdentificationCode
-    --, buyerSeller : BuyerSeller
-    --, transmissionOfOrderIndicator : TransmissionOfOrderIndicator
-    --, tradingDateTime : TradingDateTime
-    --, tradingCapacity : TradingCapacity
-    , quantity : Quantity
-
-    --, venueOfExecution : VenueOfExecution
-    --, countryOfTheBranchMembership : CountryOfTheBranchMembership
-    --, instrumentIdentificationCode : InstrumentIdentificationCode
-    --, instrumentFullName : InstrumentFullName
-    --, instrumentClassification : InstrumentClassification
-    --, notionalCurrency1 : NotionalCurrency1
-    --, notionalCurrency2 : NotionalCurrency2
-    --, priceMultiplier : PriceMultiplier
-    --, underlyingInstrumentCode : UnderlyingInstrumentCode
-    --, underlyingIndexName : UnderlyingIndexName
-    --, underlyingIndexTermPeriod : UnderlyingIndexTermPeriod
-    --, underlyingIndexTermMultiplier : UnderlyingIndexTermMultiplier
-    --, expiryDate : ExpiryDate
-    --, deliveryType : DeliveryType
-    --, investmentDecisionWithinFirm : InvestmentDecisionWithinFirm
-    --, personResponsibleForInvestmentDecisionCountry : PersonResponsibleForInvestmentDecisionCountry
-    --, executionWithinFirm : ExecutionWithinFirm
-    --, personResponsibleForExecutionCountry : PersonResponsibleForExecutionCountry
-    --, commodityDerivativeIndicator : CommodityDerivativeIndicator
-    --, securitiesFinancingTransactionIndicator : SecuritiesFinancingTransactionIndicator
-    }
-
-
-type alias Quantity =
-    { amount : Amount
-    , unit : UnitEnum
-    }
+-- Trade Data Structures --
 
 
 type PriceType
@@ -78,7 +41,27 @@ type PriceType
 
 type alias PriceNotation =
     { price : Price
+    , assetIdentifier : Maybe AssetIdentifier
     }
+
+
+priceNotation : Price -> Maybe AssetIdentifier -> Result String PriceNotation
+priceNotation price mAssetIdentifier =
+    let
+        currencyExists =
+            mAssetIdentifier |> Maybe.map .currency |> exists
+
+        rateOptionExists =
+            mAssetIdentifier |> Maybe.map .rateOption |> exists
+    in
+    if exists price.fixedInterestRate && not currencyExists then
+        Err "The asset identifier for an interest rate spread must be a rate option."
+
+    else if exists price.floatingInterestRate && not rateOptionExists then
+        Err "The asset identifier for a fixed interest rate must be a currency."
+
+    else
+        Ok (PriceNotation price mAssetIdentifier)
 
 
 type alias Price =
@@ -228,11 +211,6 @@ type alias QuantityNotation =
     }
 
 
-type alias NonNegativeQuantity =
-    -- TODO
-    Float
-
-
 type alias AssetIdentifier =
     { productIdentifier : Maybe ProductIdentifier
     , currency : Maybe Currency
@@ -299,8 +277,93 @@ type alias RateSpecification =
     }
 
 
-price : Trade -> Maybe Number
-price trade =
+
+-- Report --
+
+
+type alias Report =
+    { price : Number
+
+    --, reportStatus : ReportStatus
+    --, transactionReferenceNumber : TransactionReferenceNumber
+    --, tradingVenueTransactionIdentificationCode : TradingVenueTransactionIdentificationCode
+    --, executingEntityIdentificationCode : ExecutingEntityIdentificationCode
+    --, isInvestmentFirm : IsInvestmentFirm
+    --, submittingEntityIdentificationCode : SubmittingEntityIdentificationCode
+    --, buyerSeller : BuyerSeller
+    --, transmissionOfOrderIndicator : TransmissionOfOrderIndicator
+    --, tradingDateTime : TradingDateTime
+    --, tradingCapacity : TradingCapacity
+    , quantity : Amount
+
+    --, venueOfExecution : VenueOfExecution
+    --, countryOfTheBranchMembership : CountryOfTheBranchMembership
+    --, instrumentIdentificationCode : InstrumentIdentificationCode
+    --, instrumentFullName : InstrumentFullName
+    --, instrumentClassification : InstrumentClassification
+    --, notionalCurrency1 : NotionalCurrency1
+    --, notionalCurrency2 : NotionalCurrency2
+    --, priceMultiplier : PriceMultiplier
+    --, underlyingInstrumentCode : UnderlyingInstrumentCode
+    --, underlyingIndexName : UnderlyingIndexName
+    --, underlyingIndexTermPeriod : UnderlyingIndexTermPeriod
+    --, underlyingIndexTermMultiplier : UnderlyingIndexTermMultiplier
+    --, expiryDate : ExpiryDate
+    --, deliveryType : DeliveryType
+    --, investmentDecisionWithinFirm : InvestmentDecisionWithinFirm
+    --, personResponsibleForInvestmentDecisionCountry : PersonResponsibleForInvestmentDecisionCountry
+    --, executionWithinFirm : ExecutionWithinFirm
+    --, personResponsibleForExecutionCountry : PersonResponsibleForExecutionCountry
+    --, commodityDerivativeIndicator : CommodityDerivativeIndicator
+    --, securitiesFinancingTransactionIndicator : SecuritiesFinancingTransactionIndicator
+    }
+
+
+runReport : List Trade -> List Report
+runReport trades =
+    List.filterMap mapTrade trades
+
+
+mapTrade : Trade -> Maybe Report
+mapTrade trade =
+    let
+        -- What should happen if any of the optional prices are not present?  Skip or error?
+        price =
+            priceOf trade
+
+        quantity =
+            trade.tradableProduct.quantityNotation |> Nonempty.head |> .quantity |> .amount
+    in
+    price
+        |> Maybe.map (\p -> Report p quantity)
+
+
+assetIdentifier : Maybe ProductIdentifier -> Maybe Currency -> Maybe FloatingRateOption -> Result String AssetIdentifier
+assetIdentifier mProductId mCurrency mRateOption =
+    let
+        isValid =
+            case ( mProductId, mCurrency, mRateOption ) of
+                ( Just p, Nothing, Nothing ) ->
+                    True
+
+                ( Nothing, Just _, Nothing ) ->
+                    True
+
+                ( Nothing, Nothing, Just p ) ->
+                    True
+
+                _ ->
+                    False
+    in
+    if isValid then
+        Ok (AssetIdentifier mProductId mCurrency mRateOption)
+
+    else
+        Err "condition: one-of"
+
+
+priceOf : Trade -> Maybe Number
+priceOf trade =
     priceType trade
         |> Maybe.map
             (\pt ->
