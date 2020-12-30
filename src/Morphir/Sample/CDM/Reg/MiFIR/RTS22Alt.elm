@@ -15,7 +15,7 @@
 -}
 
 
-module Morphir.Sample.CDM.Reg.MiFIR.RTS22 exposing (..)
+module Morphir.Sample.CDM.Reg.MiFIR.RTS22Alt exposing (..)
 
 import List.Nonempty as Nonempty exposing (Nonempty)
 import Morphir.SDK.LocalDate exposing (LocalDate)
@@ -81,12 +81,11 @@ type alias PriceNotation =
     }
 
 
-type alias Price =
-    { fixedInterestRate : Maybe FixedInterestRate
-    , cashPrice : Maybe CashPrice
-    , exchangeRate : Maybe ExchangeRate
-    , floatingInterestRate : Maybe FloatingInterestRate
-    }
+type Price
+    = FixedInterestRate FixedInterestRate
+    | CashPrice CashPrice
+    | ExchangeRate ExchangeRate
+    | FloatingInterestRate FloatingInterestRate
 
 
 type alias CashPrice =
