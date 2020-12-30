@@ -3,7 +3,8 @@
   "sourceDirectory": "src",
   "exposedModules": [
     "BooksAndRecords"
-    , "LCR/Calculations"
-    , "CDM/"
+  , "LCR/Calculations"
+  , "CDM/RTS22"
+  , "CDM/RTS22Alt"
   ]
 }
