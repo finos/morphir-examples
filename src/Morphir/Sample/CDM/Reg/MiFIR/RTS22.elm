@@ -89,7 +89,7 @@ type alias Price =
 
 
 type alias FixedInterestRate =
-    { rate : Float
+    { rate : Number
     }
 
 
@@ -274,12 +274,12 @@ type alias InterestRatePayout =
 
 
 type alias RateSpecification =
-    { fixedRate : List Float
-    , floatingRate : List Float
+    { fixedRate : List Number
+    , floatingRate : List Number
     }
 
 
-price : Trade -> Maybe Float
+price : Trade -> Maybe Number
 price trade =
     priceType trade
         |> Maybe.map
@@ -340,7 +340,7 @@ extract Trade -> tradableProduct -> priceNotation -> price -> fixedInterestRate 
 maxBy FixedInterestRate -> rate then
 extract FixedInterestRate -> rate as "Price"
 -}
-fixedFixedPrice : Trade -> Maybe Float
+fixedFixedPrice : Trade -> Maybe Number
 fixedFixedPrice trade =
     trade.tradableProduct.priceNotation
         |> Nonempty.toList
@@ -371,7 +371,7 @@ isFixedFloat trade =
     fixedCount == 1 && floatingCount == 1
 
 
-fixedFloatPrice : Trade -> Maybe Float
+fixedFloatPrice : Trade -> Maybe Number
 fixedFloatPrice trade =
     -- TODO : Is this the correct interpretation of the above?
     trade.tradableProduct.priceNotation
@@ -397,7 +397,7 @@ isIRSwapBasis trade =
     count == 2
 
 
-basisSwapPrice : Trade -> Maybe Float
+basisSwapPrice : Trade -> Maybe Number
 basisSwapPrice trade =
     trade.tradableProduct.priceNotation
         |> Nonempty.toList
@@ -415,7 +415,7 @@ isCreditDefaultSwap trade =
     trade.tradableProduct.product.contractualProduct.economicTerms.payout.creditDefaultPayout |> exists
 
 
-cdsPrice : Trade -> Maybe Float
+cdsPrice : Trade -> Maybe Number
 cdsPrice trade =
     let
         mp =
