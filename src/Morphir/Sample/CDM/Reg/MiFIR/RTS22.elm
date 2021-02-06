@@ -27,7 +27,8 @@ import Morphir.Sample.CDM.Reg.MiFIR.FloatingRateIndexEnum exposing (FloatingRate
 import Morphir.Sample.CDM.Reg.MiFIR.Quantities exposing (NonNegativeQuantity)
 import Morphir.Sample.LCR.Flows exposing (Amount)
 
-
+{-| This example focuses on the Rosetta DSL's reporting functionality.
+-}
 
 -- Trade Data Structures --
 
