@@ -237,7 +237,6 @@ type alias ProductIdentifier =
 
 
 type alias Currency =
-    -- TODO
     String
 
 
@@ -281,7 +280,7 @@ type alias RateSpecification =
 
 -- Report --
 
-
+{- While the CDM RTS22 report contains all of the fields listed, this example focuses solely on the price and quantity fields. -}
 type alias Report =
     { price : Number
 
