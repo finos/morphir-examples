@@ -1,7 +1,7 @@
 # Node
 node_modules/
 dist/
-
+.idea/
 
 # Elm
 elm-stuff/
@@ -15,3 +15,5 @@ morphir-version.json
 
 .fake
 .ionide
+
+*.iml
