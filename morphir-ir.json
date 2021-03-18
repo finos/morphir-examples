@@ -1,0 +1,15 @@
+[
+    "library",
+    [
+        [
+            "morphir"
+        ],
+        [
+            "sample"
+        ]
+    ],
+    [],
+    {
+        "modules": []
+    }
+]
