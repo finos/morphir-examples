@@ -1,31 +1,7 @@
 {
-    "name": "Morphir.Reference.Model",
+    "name": "Morphir.Example.App",
     "sourceDirectory": "src",
     "exposedModules": [
-        "BooksAndRecords",
-        "Types",
-        "Values",
-        "ValueEditors",
-        "Formulas",
-        "Insight.UseCase1",
-        "Presentations.UKFintechMeetup",
-        "Issues.Issue210",
-        "Issues.Issue227",
-        "Issues.Issue273",
-        "Issues.Issue330",
-        "Issues.Issue331",
-        "Issues.Issue333",
-        "Issues.Issue349",
-        "Issues.Issue350",
-        "Issues.Issue364",
-        "Issues.Issue373",
-        "Issues.Issue401",
-        "Issues.Issue407",
-        "Issues.Issue432",
-        "Issues.Issue331",
-        "Issues.DecisionTables",
-        "Issues.PatternModel.BasicEnum",
-        "Issues.PatternModel.OtherBasicEnum",
-        "Issues.Issue410"
+        "Rentals"
     ]
 }
