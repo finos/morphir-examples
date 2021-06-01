@@ -15,12 +15,12 @@
     {
         var xmlHttp = new XMLHttpRequest();
         xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
-        xmlHttp.send("");
+        xmlHttp.send(null);
         return JSON.parse(xmlHttp.responseText);
     }
 
     //HTTP GET request to fetch distribution JSON from server
-    var distribution = httpGet("morphir-ir.json");
+    var distribution = httpGet("http://localhost:8000/server/morphir-ir.json");
 
     //ELM integration in JavaScript for interoperability
     var app = Elm.Morphir.Web.Insight.init({
@@ -38,6 +38,4 @@
     app.ports.receiveFunctionArguments.send(argsList);
 
 </script>
-
-Welcome
 </html>
