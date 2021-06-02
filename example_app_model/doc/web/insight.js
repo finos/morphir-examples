@@ -14292,6 +14292,66 @@ var $author$project$Morphir$IR$SDK$Basics$nativeFunctions = _List_fromArray(
 					$author$project$Morphir$Value$Native$returnLiteral($author$project$Morphir$IR$Literal$BoolLiteral))
 				]))),
 		_Utils_Tuple2(
+		'lessThanOrEqual',
+		$author$project$Morphir$Value$Native$oneOf(
+			_List_fromArray(
+				[
+					A4(
+					$author$project$Morphir$Value$Native$eval2,
+					$elm$core$Basics$le,
+					$author$project$Morphir$Value$Native$expectLiteral($author$project$Morphir$Value$Native$intLiteral),
+					$author$project$Morphir$Value$Native$expectLiteral($author$project$Morphir$Value$Native$intLiteral),
+					$author$project$Morphir$Value$Native$returnLiteral($author$project$Morphir$IR$Literal$BoolLiteral)),
+					A4(
+					$author$project$Morphir$Value$Native$eval2,
+					$elm$core$Basics$le,
+					$author$project$Morphir$Value$Native$expectLiteral($author$project$Morphir$Value$Native$floatLiteral),
+					$author$project$Morphir$Value$Native$expectLiteral($author$project$Morphir$Value$Native$floatLiteral),
+					$author$project$Morphir$Value$Native$returnLiteral($author$project$Morphir$IR$Literal$BoolLiteral)),
+					A4(
+					$author$project$Morphir$Value$Native$eval2,
+					$elm$core$Basics$le,
+					$author$project$Morphir$Value$Native$expectLiteral($author$project$Morphir$Value$Native$charLiteral),
+					$author$project$Morphir$Value$Native$expectLiteral($author$project$Morphir$Value$Native$charLiteral),
+					$author$project$Morphir$Value$Native$returnLiteral($author$project$Morphir$IR$Literal$BoolLiteral)),
+					A4(
+					$author$project$Morphir$Value$Native$eval2,
+					$elm$core$Basics$le,
+					$author$project$Morphir$Value$Native$expectLiteral($author$project$Morphir$Value$Native$stringLiteral),
+					$author$project$Morphir$Value$Native$expectLiteral($author$project$Morphir$Value$Native$stringLiteral),
+					$author$project$Morphir$Value$Native$returnLiteral($author$project$Morphir$IR$Literal$BoolLiteral))
+				]))),
+		_Utils_Tuple2(
+		'greaterThanOrEqual',
+		$author$project$Morphir$Value$Native$oneOf(
+			_List_fromArray(
+				[
+					A4(
+					$author$project$Morphir$Value$Native$eval2,
+					$elm$core$Basics$ge,
+					$author$project$Morphir$Value$Native$expectLiteral($author$project$Morphir$Value$Native$intLiteral),
+					$author$project$Morphir$Value$Native$expectLiteral($author$project$Morphir$Value$Native$intLiteral),
+					$author$project$Morphir$Value$Native$returnLiteral($author$project$Morphir$IR$Literal$BoolLiteral)),
+					A4(
+					$author$project$Morphir$Value$Native$eval2,
+					$elm$core$Basics$ge,
+					$author$project$Morphir$Value$Native$expectLiteral($author$project$Morphir$Value$Native$floatLiteral),
+					$author$project$Morphir$Value$Native$expectLiteral($author$project$Morphir$Value$Native$floatLiteral),
+					$author$project$Morphir$Value$Native$returnLiteral($author$project$Morphir$IR$Literal$BoolLiteral)),
+					A4(
+					$author$project$Morphir$Value$Native$eval2,
+					$elm$core$Basics$ge,
+					$author$project$Morphir$Value$Native$expectLiteral($author$project$Morphir$Value$Native$charLiteral),
+					$author$project$Morphir$Value$Native$expectLiteral($author$project$Morphir$Value$Native$charLiteral),
+					$author$project$Morphir$Value$Native$returnLiteral($author$project$Morphir$IR$Literal$BoolLiteral)),
+					A4(
+					$author$project$Morphir$Value$Native$eval2,
+					$elm$core$Basics$ge,
+					$author$project$Morphir$Value$Native$expectLiteral($author$project$Morphir$Value$Native$stringLiteral),
+					$author$project$Morphir$Value$Native$expectLiteral($author$project$Morphir$Value$Native$stringLiteral),
+					$author$project$Morphir$Value$Native$returnLiteral($author$project$Morphir$IR$Literal$BoolLiteral))
+				]))),
+		_Utils_Tuple2(
 		'abs',
 		$author$project$Morphir$Value$Native$oneOf(
 			_List_fromArray(

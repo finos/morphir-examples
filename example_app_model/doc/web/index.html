@@ -7412,7 +7412,7 @@ var $author$project$Morphir$Web$DevelopApp$httpMakeModel = $elm$http$Http$get(
 				}
 			},
 			$author$project$Morphir$IR$Distribution$Codec$decodeVersionedDistribution),
-		url: 'https://finos.github.io/morphir-examples/example_app_model/doc/morphir-ir.json'
+		url: './morphir-ir.json'
 	});
 var $author$project$Morphir$Web$DevelopApp$NotFound = {$: 'NotFound'};
 var $elm$url$Url$Parser$State = F5(
@@ -9744,7 +9744,7 @@ var $author$project$Morphir$Web$DevelopApp$httpSaveTestSuite = F2(
 						}
 					},
 					$author$project$Morphir$Correctness$Codec$decodeTestSuite(ir)),
-				url: '/server/morphir-tests.json'
+				url: './morphir-tests.json'
 			});
 	});
 var $author$project$Morphir$Web$DevelopApp$httpTestModel = function (ir) {
@@ -9762,7 +9762,7 @@ var $author$project$Morphir$Web$DevelopApp$httpTestModel = function (ir) {
 					}
 				},
 				$author$project$Morphir$Correctness$Codec$decodeTestSuite(ir)),
-			url: '/server/morphir-tests.json'
+			url: './morphir-tests.json'
 		});
 };
 var $author$project$Morphir$Visual$ValueEditor$RecordEditor = function (a) {
@@ -18323,6 +18323,66 @@ var $author$project$Morphir$IR$SDK$Basics$nativeFunctions = _List_fromArray(
 					A4(
 					$author$project$Morphir$Value$Native$eval2,
 					$elm$core$Basics$gt,
+					$author$project$Morphir$Value$Native$expectLiteral($author$project$Morphir$Value$Native$stringLiteral),
+					$author$project$Morphir$Value$Native$expectLiteral($author$project$Morphir$Value$Native$stringLiteral),
+					$author$project$Morphir$Value$Native$returnLiteral($author$project$Morphir$IR$Literal$BoolLiteral))
+				]))),
+		_Utils_Tuple2(
+		'lessThanOrEqual',
+		$author$project$Morphir$Value$Native$oneOf(
+			_List_fromArray(
+				[
+					A4(
+					$author$project$Morphir$Value$Native$eval2,
+					$elm$core$Basics$le,
+					$author$project$Morphir$Value$Native$expectLiteral($author$project$Morphir$Value$Native$intLiteral),
+					$author$project$Morphir$Value$Native$expectLiteral($author$project$Morphir$Value$Native$intLiteral),
+					$author$project$Morphir$Value$Native$returnLiteral($author$project$Morphir$IR$Literal$BoolLiteral)),
+					A4(
+					$author$project$Morphir$Value$Native$eval2,
+					$elm$core$Basics$le,
+					$author$project$Morphir$Value$Native$expectLiteral($author$project$Morphir$Value$Native$floatLiteral),
+					$author$project$Morphir$Value$Native$expectLiteral($author$project$Morphir$Value$Native$floatLiteral),
+					$author$project$Morphir$Value$Native$returnLiteral($author$project$Morphir$IR$Literal$BoolLiteral)),
+					A4(
+					$author$project$Morphir$Value$Native$eval2,
+					$elm$core$Basics$le,
+					$author$project$Morphir$Value$Native$expectLiteral($author$project$Morphir$Value$Native$charLiteral),
+					$author$project$Morphir$Value$Native$expectLiteral($author$project$Morphir$Value$Native$charLiteral),
+					$author$project$Morphir$Value$Native$returnLiteral($author$project$Morphir$IR$Literal$BoolLiteral)),
+					A4(
+					$author$project$Morphir$Value$Native$eval2,
+					$elm$core$Basics$le,
+					$author$project$Morphir$Value$Native$expectLiteral($author$project$Morphir$Value$Native$stringLiteral),
+					$author$project$Morphir$Value$Native$expectLiteral($author$project$Morphir$Value$Native$stringLiteral),
+					$author$project$Morphir$Value$Native$returnLiteral($author$project$Morphir$IR$Literal$BoolLiteral))
+				]))),
+		_Utils_Tuple2(
+		'greaterThanOrEqual',
+		$author$project$Morphir$Value$Native$oneOf(
+			_List_fromArray(
+				[
+					A4(
+					$author$project$Morphir$Value$Native$eval2,
+					$elm$core$Basics$ge,
+					$author$project$Morphir$Value$Native$expectLiteral($author$project$Morphir$Value$Native$intLiteral),
+					$author$project$Morphir$Value$Native$expectLiteral($author$project$Morphir$Value$Native$intLiteral),
+					$author$project$Morphir$Value$Native$returnLiteral($author$project$Morphir$IR$Literal$BoolLiteral)),
+					A4(
+					$author$project$Morphir$Value$Native$eval2,
+					$elm$core$Basics$ge,
+					$author$project$Morphir$Value$Native$expectLiteral($author$project$Morphir$Value$Native$floatLiteral),
+					$author$project$Morphir$Value$Native$expectLiteral($author$project$Morphir$Value$Native$floatLiteral),
+					$author$project$Morphir$Value$Native$returnLiteral($author$project$Morphir$IR$Literal$BoolLiteral)),
+					A4(
+					$author$project$Morphir$Value$Native$eval2,
+					$elm$core$Basics$ge,
+					$author$project$Morphir$Value$Native$expectLiteral($author$project$Morphir$Value$Native$charLiteral),
+					$author$project$Morphir$Value$Native$expectLiteral($author$project$Morphir$Value$Native$charLiteral),
+					$author$project$Morphir$Value$Native$returnLiteral($author$project$Morphir$IR$Literal$BoolLiteral)),
+					A4(
+					$author$project$Morphir$Value$Native$eval2,
+					$elm$core$Basics$ge,
 					$author$project$Morphir$Value$Native$expectLiteral($author$project$Morphir$Value$Native$stringLiteral),
 					$author$project$Morphir$Value$Native$expectLiteral($author$project$Morphir$Value$Native$stringLiteral),
 					$author$project$Morphir$Value$Native$returnLiteral($author$project$Morphir$IR$Literal$BoolLiteral))
@@ -30638,7 +30698,7 @@ var $author$project$Morphir$Web$DevelopApp$viewHeader = function (model) {
 											$mdgriffith$elm_ui$Element$height(
 											$mdgriffith$elm_ui$Element$px(40))
 										]),
-									{description: 'Morphir Logo', src: '/assets/2020_Morphir_Logo_Icon_WHT.svg'})),
+									{description: 'Morphir Logo', src: './assets/2020_Morphir_Logo_Icon_WHT.svg'})),
 								A2(
 								$mdgriffith$elm_ui$Element$el,
 								_List_fromArray(
