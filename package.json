@@ -4,6 +4,6 @@
     "morphir-model"
   ],
   "devDependencies": {
-    "morphir-elm": "^2.15.0"
+    "morphir-elm": "^2.30.4"
   }
 }
