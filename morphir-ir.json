@@ -1,15 +1,18 @@
-[
-    "library",
-    [
+{
+    "formatVersion": 1,
+    "distribution": [
+        "library",
         [
-            "morphir"
+            [
+                "morphir"
+            ],
+            [
+                "sample"
+            ]
         ],
-        [
-            "sample"
-        ]
-    ],
-    [],
-    {
-        "modules": []
-    }
-]
+        [],
+        {
+            "modules": []
+        }
+    ]
+}
