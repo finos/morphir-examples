@@ -1,6 +1,37 @@
 # Morphir Tutorial: First Logic Model
 
-We'll start out with a very simple example of modeling logic: whether we have enough surfboards to satisfy a rental request.  We'll put that logic into a function:
+We'll start out with a very simple example of modeling logic: whether we have enough surfboards to satisfy a rental request.  First up, let's create the Elm source file for our code.  
+
+First create the file ```src/Morphir/Examples/App/Rentals.elm```.  In linux that's:
+
+```
+mkdir src/Morphir
+mkdir src/Morphir/Examples
+mkdir src/Morphir/Examples/App
+touch src/Morphir/Examples/App/Rentals.elm
+```
+
+We need to update ```morphir.json``` to reflect our new module.  Edit it to add the ```Morphir.Example.App``` package and the ```Rentals``` module and like this:
+
+```
+{
+    "name": "Morphir.Example.App",
+    "sourceDirectory": "src",
+    "exposedModules": [
+        "Rentals"
+    ]
+}
+```
+
+Now edit the ```Rentals.eml``` file.  First, we want to reflect the module (aka namespace).  Add:
+
+``` Elm
+module Morphir.Example.App.Rentals exposing (..)
+
+
+```
+
+That takes care of the boilerplate.  Now we can focus on the business logic.  We'll put that into a function:
 
 ``` Elm
 request : Int -> Int -> Result String Int
