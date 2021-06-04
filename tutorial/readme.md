@@ -96,9 +96,9 @@ We want to get back to a continuous state of:
 
 
 So with that out of the way, let's dive in...
-* [Install Morphir with a new project](install)
-* [Model a request](model_a_request)
+* [Install Morphir with a new project](install.md)
+* [Step 1: First Logic Model](step_1_first_logic/readme.md)
 
 
-[Next](install)
+[Next](install.md)
 
