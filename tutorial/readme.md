@@ -89,7 +89,7 @@ The problem comes when, inevitably, developers and business experts come and go,
 At this point, it becomes difficult to reason about the application and what changes will do to it.  That's a major problem for a large application.  It leads to legacy debt, higher risk, and slower delivery.
 
 ## Optimum Efficiency
-We want to get back to a continuous state of:
+We want to get back to the business logic being the main asset of the application.  The optimal efficiency is a state where the business logic is the central developer focus that gets continuosly projected onto the various technologies of the moment:
 
 <img src="ideal.png"
      style="size=75%;background-color:LightGray" />
