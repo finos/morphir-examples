@@ -26,4 +26,4 @@ elm init
 ```
 
 
-[Home](../) | [Prev](../) | [Next](step_1_first_logic/readme)
+[Home](../readme.md) | [Prev](../readme.md) | [Next](step_1_first_logic/readme.md)
