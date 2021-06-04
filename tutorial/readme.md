@@ -81,15 +81,15 @@ This specification gets handed to developers, who immediately start thinking of 
      style="background-color:LightGray" /> -->
 
 ## Lost Knowledge
-The problem comes when the business specifications get stale or lost over time.  What's left is this:
+The problem comes when, inevitably, developers and business experts come and go, documentation gets stale, and other factors cause the knowledge of the application's expected behavior to get out of sync, stale, or lost over time. As that happens, individual technologies become the system of record for the application's behavior.  What's left is this:
 
 <img src="lost_knowledge.png"
      style="size=75%;background-color:LightGray" />
 
-That's a major problem for a large application.  It leads to legacy debt, higher risk, and slower delivery.
+At this point, it becomes difficult to reason about the application and what changes will do to it.  That's a major problem for a large application.  It leads to legacy debt, higher risk, and slower delivery.
 
 ## Optimum Efficiency
-We want to get back to a continuous state of:
+We want to get back to the business logic being the main asset of the application.  The optimal efficiency is a state where the business logic is the central developer focus that gets continuosly projected onto the various technologies of the moment:
 
 <img src="ideal.png"
      style="size=75%;background-color:LightGray" />
