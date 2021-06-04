@@ -12,10 +12,13 @@ The business is simple: Rent surfboards whenever they're available.
 
 ## Why?
 Seems simple enough, so why would we consider doing it with Morphir.  One of our goals is to optimize the feedback loop between the business and developers. 
-Business experts tend to the think of an application in its business terms.  In this case they might be thinking something like:
+Business experts tend to the think of an application in its business terms.  
 
-## Business View
-<p style="padding-left:50px;font-size:large" >
+### Business View
+
+In this case they might be thinking something like:
+
+<div style="padding-left:50px;font-size:20px;border-style:solid" >
   <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
      <mrow>
           <mi>availability</mi>
@@ -31,7 +34,7 @@ Business experts tend to the think of an application in its business terms.  In 
   <br/>
 where:
   <br/>
-  <p style="padding-left:70px;font-size:large" >
+  <p style="padding-left:70px" >
   <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
      <mrow>
           <mi>inventory</mi>
@@ -64,10 +67,12 @@ where:
      </mrow>
   </math>
   </p>
-</p>
+</div>
 
-## Developer View
+### Developer View
+
 This specification gets handed to developers, who immediately start thinking of how to split it up to run most efficiently on the various technologies. They might view it as:
+
 <img src="developer_view.png"
      style="size=75%;background-color:LightGray" />
 
@@ -80,6 +85,7 @@ The problem comes when the business specifications get stale or lost over time. 
 
 <img src="lost_knowledge.png"
      style="size=75%;background-color:LightGray" />
+
 That's a major problem for a large application.  It leads to legacy debt, higher risk, and slower delivery.
 
 ## Optimum Efficiency
