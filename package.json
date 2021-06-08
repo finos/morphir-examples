@@ -3,7 +3,15 @@
   "keywords": [
     "morphir-model"
   ],
+  "scripts": {
+    "build": "elm make && morphir-elm make",
+    "test": "lobo  --framework=elm-test",
+    "train-build-release": "train-build-release"
+  },
   "devDependencies": {
+    "lobo": "^1.0.0"
+  },
+  "dependencies": {
     "morphir-elm": "^2.30.4"
   }
 }

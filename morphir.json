@@ -2,6 +2,6 @@
   "name": "Morphir/Sample",
   "sourceDirectory": "src",
   "exposedModules": [
-    "BooksAndRecords"
+    "Reg.LCR.FedCode"
   ]
 }
