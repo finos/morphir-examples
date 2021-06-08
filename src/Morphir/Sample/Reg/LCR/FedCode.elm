@@ -204,71 +204,76 @@ centralBankToSubProduct cb =
 
 classify : Cashflow -> Dict PartyID CentralBank -> FedCode
 classify cashflow centralBanks =
-    case Dict.get cashflow.partyId centralBanks of
+    let
+        partyAsCentralBank : Maybe CentralBank
+        partyAsCentralBank =
+            Dict.get cashflow.partyId centralBanks
+    in
+    case partyAsCentralBank of
         -- It is a central bank
         Just centralBank ->
-            case cashflow.tenQLevel6 of
-                "Segregated Cash" ->
-                    case centralBankToSubProduct centralBank of
-                        FRB ->
-                            IA31
+            if cashflow.tenQLevel6 == "Segregated Cash" then
+                case centralBankToSubProduct centralBank of
+                    FRB ->
+                        IA31
 
-                        SNB ->
-                            IA32
+                    SNB ->
+                        IA32
 
-                        BOE ->
-                            IA33
+                    BOE ->
+                        IA33
 
-                        ECB ->
-                            IA34
+                    ECB ->
+                        IA34
 
-                        BOJ ->
-                            IA35
+                    BOJ ->
+                        IA35
 
-                        RBA ->
-                            IA36
+                    RBA ->
+                        IA36
 
-                        BOC ->
-                            IA37
+                    BOC ->
+                        IA37
 
-                        OCB ->
-                            IA38
+                    OCB ->
+                        IA38
 
-                        Other_Cash_Currency_And_Coin ->
-                            IA39
+                    Other_Cash_Currency_And_Coin ->
+                        IA39
 
-                _ ->
-                    case centralBankToSubProduct centralBank of
-                        FRB ->
-                            IA41
+            else
+                case centralBankToSubProduct centralBank of
+                    FRB ->
+                        IA41
 
-                        SNB ->
-                            IA42
+                    SNB ->
+                        IA42
 
-                        BOE ->
-                            IA43
+                    BOE ->
+                        IA43
 
-                        ECB ->
-                            IA44
+                    ECB ->
+                        IA44
 
-                        BOJ ->
-                            IA45
+                    BOJ ->
+                        IA45
 
-                        RBA ->
-                            IA46
+                    RBA ->
+                        IA46
 
-                        BOC ->
-                            IA47
+                    BOC ->
+                        IA47
 
-                        OCB ->
-                            IA48
+                    OCB ->
+                        IA48
 
-                        Other_Cash_Currency_And_Coin ->
-                            IA49
+                    Other_Cash_Currency_And_Coin ->
+                        IA49
 
         -- It is not a central bank
         Nothing ->
-            if List.member (String.toUpper cashflow.tenQLevel5) [ "CASH AND DUE FROM BANKS", "OVERNIGHT AND TERM DEPOSITS", "CASH EQUIVALENTS" ] then
+            --if List.member (String.toUpper cashflow.tenQLevel5) [ "CASH AND DUE FROM BANKS", "OVERNIGHT AND TERM DEPOSITS", "CASH EQUIVALENTS" ] then
+            if String.toUpper cashflow.tenQLevel5 == "CASH AND DUE FROM BANKS" || String.toUpper cashflow.tenQLevel5 == "OVERNIGHT AND TERM DEPOSITS" || String.toUpper cashflow.tenQLevel5 == "CASH EQUIVALENTS" then
                 if netCashUSD cashflow >= 0 then
                     if isOnshore cashflow then
                         IU1
