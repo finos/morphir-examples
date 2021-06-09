@@ -3,5 +3,6 @@
   "sourceDirectory": "src",
   "exposedModules": [
     "Reg.LCR.FedCode"
+    , "Reg.LCR.FedCodeRules"
   ]
 }

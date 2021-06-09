@@ -31,25 +31,42 @@ import Test exposing (Test, describe, test)
 import Time exposing (Month(..))
 
 
+cashflow =
+    Cashflow
+        (LegalEntity "LE1" (Just USA))
+        "partyID1"
+        USD
+        (Counterparty USA "5Gx" "Account1")
+        (Money 100)
+        (Money 90)
+        ""
+        ""
+        ""
+        ""
+        ""
+        "Segregated Cash"
+
+
+centralBanks =
+    Dict.fromList
+        [ ( "brasil", Banco_Central_Do_Brasil )
+        , ( "japan", Bank_of_Japan )
+        , ( "england", Bank_of_England )
+        , ( "france", Banca_De_France )
+        , ( "italy", Bance_Di_Italia )
+        , ( "swiss", Swiss_National_Bank )
+        , ( "korea", Bank_of_Korea )
+        , ( "deutsche", Deutsche_Bundesbank )
+        , ( "lux", Banque_Centrale_Du_Luxembourg )
+        , ( "china", Peoples_Bank_of_China )
+        , ( "india", Reserve_Bank_of_India )
+        , ( "russia", Central_Bank_of_The_Russian_Federation )
+        , ( "fed", Federal_Reserve_Bank )
+        ]
+
+
 netUsdTest : Test
 netUsdTest =
-    let
-        cashflow =
-            Cashflow
-                (LegalEntity "LE1" (Just USA))
-                "partyID1"
-                USD
-                (Counterparty USA "5Gx" "Account1")
-                (Money 100)
-                (Money 90)
-                ""
-                ""
-                ""
-                ""
-                ""
-                ""
-                "Segregated Cash"
-    in
     describe "Net USD tests"
         [ test "basic net USD" <| \_ -> netCashUSD cashflow |> Expect.equal 100
         ]
@@ -73,20 +90,7 @@ isOnshoreTest : Test
 isOnshoreTest =
     let
         c =
-            Cashflow
-                (LegalEntity "" (Just USA))
-                ""
-                USD
-                (Counterparty USA "" "")
-                (Money 100)
-                (Money 90)
-                ""
-                ""
-                ""
-                ""
-                ""
-                ""
-                "Segregated Cash"
+            cashflow
     in
     describe "Onshore vs Offshore tests"
         [ test "All US" <| \_ -> isOnshore c |> Expect.true "Expected True"
@@ -100,37 +104,7 @@ classifyTest : Test
 classifyTest =
     let
         c =
-            Cashflow
-                (LegalEntity "" (Just USA))
-                ""
-                USD
-                (Counterparty USA "" "")
-                (Money 100)
-                (Money 90)
-                ""
-                ""
-                ""
-                ""
-                ""
-                ""
-                "Segregated Cash"
-
-        centralBanks =
-            Dict.fromList
-                [ ( "brasil", Banco_Central_Do_Brasil )
-                , ( "japan", Bank_of_Japan )
-                , ( "england", Bank_of_England )
-                , ( "france", Banca_De_France )
-                , ( "italy", Bance_Di_Italia )
-                , ( "swiss", Swiss_National_Bank )
-                , ( "korea", Bank_of_Korea )
-                , ( "deutsche", Deutsche_Bundesbank )
-                , ( "lux", Banque_Centrale_Du_Luxembourg )
-                , ( "china", Peoples_Bank_of_China )
-                , ( "india", Reserve_Bank_of_India )
-                , ( "russia", Central_Bank_of_The_Russian_Federation )
-                , ( "fed", Federal_Reserve_Bank )
-                ]
+            cashflow
     in
     describe "6G classification test"
         [ test "I.A.3.1" <| \_ -> classify { c | partyId = "fed" } centralBanks |> Expect.equal IA31
