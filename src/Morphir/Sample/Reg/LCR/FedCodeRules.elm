@@ -183,7 +183,7 @@ classify centralBanks cashflow =
     -- It is a central bank
     case partyIsCentralBank of
         Just centralBank ->
-            rules_I_A cashflow.tenQLevel6 centralBank
+            rules_I_A cashflow.tenQLevel4 centralBank
 
         notCentralBank ->
             if String.toUpper cashflow.tenQLevel5 == "CASH AND DUE FROM BANKS" || String.toUpper cashflow.tenQLevel5 == "OVERNIGHT AND TERM DEPOSITS" || String.toUpper cashflow.tenQLevel5 == "CASH EQUIVALENTS" then
@@ -193,56 +193,17 @@ classify centralBanks cashflow =
                 Nothing
 
 
-centralBankToSubProduct : CentralBank -> CentralBankSubProduct
-centralBankToSubProduct cb =
-    case cb of
-        Federal_Reserve_Bank ->
-            FRB
 
-        Swiss_National_Bank ->
-            SNB
-
-        Bank_of_England ->
-            BOE
-
-        European_Central_Bank ->
-            ECB
-
-        Bank_of_Japan ->
-            BOJ
-
-        Reserve_Bank_of_Australia ->
-            RBA
-
-        Bank_of_Canada ->
-            BOC
-
-        -- TODO What maps to Other Cash Currency and Coin????
-        _ ->
-            OCB
-
-
-segregatedCash : String
-segregatedCash =
-    "Seg Cash"
-
-
-isCentralBank : Maybe CentralBank -> Bool
-isCentralBank m =
-    m |> Maybe.map (\x -> True) |> Maybe.withDefault False
-
-
-
---rules_I_A : TenQLevel6 -> CentralBank -> Maybe RuleCode
+--rules_I_A : TenQLevel4 -> CentralBank -> Maybe RuleCode
 
 
 rules_I_A : String -> CentralBank -> Maybe RuleCode
-rules_I_A tenQLevel6 centralBank =
-    if tenQLevel6 == segregatedCash then
-        Just (rule_I_A_3 centralBank)
+rules_I_A tenQLevel4 centralBank =
+    if tenQLevel4 == segregatedCash then
+        Just (rule_I_A_4 centralBank)
 
     else
-        Just (rule_I_A_4 centralBank)
+        Just (rule_I_A_3 centralBank)
 
 
 rule_I_A_3 : CentralBank -> RuleCode
@@ -324,9 +285,52 @@ rule_I_U adjustedAmountUSD legalEntityCountry cashflowCurrency counterpartyCount
         Just IU4
 
 
+centralBankToSubProduct : CentralBank -> CentralBankSubProduct
+centralBankToSubProduct cb =
+    case cb of
+        Federal_Reserve_Bank ->
+            FRB
+
+        Swiss_National_Bank ->
+            SNB
+
+        Bank_of_England ->
+            BOE
+
+        European_Central_Bank ->
+            ECB
+
+        Bank_of_Japan ->
+            BOJ
+
+        Reserve_Bank_of_Australia ->
+            RBA
+
+        Bank_of_Canada ->
+            BOC
+
+        -- TODO What maps to Other Cash Currency and Coin????
+        _ ->
+            OCB
+
+
+segregatedCash : String
+segregatedCash =
+    "Seg Cash"
+
+
+isCentralBank : Maybe CentralBank -> Bool
+isCentralBank m =
+    m |> Maybe.map (\x -> True) |> Maybe.withDefault False
+
+
 isOnshore : Country -> Currency -> Country -> Bool
 isOnshore legalEntityCountry cashflowCurrency counterpartyCountry =
     Just legalEntityCountry == Currency.country cashflowCurrency && legalEntityCountry == counterpartyCountry
+
+
+
+-- Group across same Entity, Party ID, Currency, and Product Type
 
 
 netCashUSD : AdjustedAmountUSD -> Float
