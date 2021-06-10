@@ -40,9 +40,9 @@ cashflow =
         ""
         ""
         ""
-        ""
-        ""
         "Segregated Cash"
+        ""
+        ""
 
 
 centralBanks =
@@ -138,29 +138,16 @@ rules_I_ATest =
             "Other"
     in
     describe "Rules I.A Test"
-        [ test "Seg Cash Federal_Reserve_Bank" <| \_ -> rules_I_A segCash Federal_Reserve_Bank |> Debug.toString |> String.left 8 |> Expect.equal "Just IA3"
-        , test "Not Seg Cash Federal_Reserve_Bank" <| \_ -> rules_I_A notSegCash Federal_Reserve_Bank |> Debug.toString |> String.left 8 |> Expect.equal "Just IA4"
+        [ test "Not Seg Cash Federal_Reserve_Bank" <| \_ -> rules_I_A notSegCash Federal_Reserve_Bank |> Debug.toString |> String.left 8 |> Expect.equal "Just IA3"
+        , test "Seg Cash Federal_Reserve_Bank" <| \_ -> rules_I_A segCash Federal_Reserve_Bank |> Debug.toString |> String.left 8 |> Expect.equal "Just IA4"
         ]
 
 
 classifyTest : Test
 classifyTest =
-    let
-        segFed =
-            { cashflow | tenQLevel6 = segregatedCash, partyId = "fed" }
-
-        segSwiss =
-            { cashflow | tenQLevel6 = segregatedCash, partyId = "swiss" }
-
-        unsegFed =
-            { cashflow | tenQLevel6 = "", partyId = "fed" }
-
-        unsegSwiss =
-            { cashflow | tenQLevel6 = "", partyId = "lux" }
-    in
     describe "6G classification test"
-        [ test "I.A.3.1" <| \_ -> classify centralBanks segFed |> Expect.equal (Just IA31)
-        , test "I.A.3.2" <| \_ -> classify centralBanks segSwiss |> Expect.equal (Just IA32)
-        , test "I.A.4.1" <| \_ -> classify centralBanks unsegFed |> Expect.equal (Just IA41)
-        , test "I.A.4.2" <| \_ -> classify centralBanks unsegSwiss |> Expect.equal (Just IA48)
+        [ test "I.A.3.1" <| \_ -> classify centralBanks { cashflow | tenQLevel4 = "            ", partyId = "fed" } |> Expect.equal (Just IA31)
+        , test "I.A.3.8" <| \_ -> classify centralBanks { cashflow | tenQLevel4 = "            ", partyId = "lux" } |> Expect.equal (Just IA38)
+        , test "I.A.4.1" <| \_ -> classify centralBanks { cashflow | tenQLevel4 = segregatedCash, partyId = "fed" } |> Expect.equal (Just IA41)
+        , test "I.A.4.2" <| \_ -> classify centralBanks { cashflow | tenQLevel4 = segregatedCash, partyId = "swiss" } |> Expect.equal (Just IA42)
         ]
