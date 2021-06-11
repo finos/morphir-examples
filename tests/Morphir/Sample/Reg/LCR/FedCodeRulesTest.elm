@@ -97,34 +97,34 @@ isOnshoreTest =
 rule_I_A_3Test : Test
 rule_I_A_3Test =
     describe "Rule I.A.3 Test"
-        [ test "Federal_Reserve_Bank" <| \_ -> rule_I_A_3 Federal_Reserve_Bank |> Expect.equal IA31
-        , test "Swiss_National_Bank" <| \_ -> rule_I_A_3 Swiss_National_Bank |> Expect.equal IA32
-        , test "Bank_of_England" <| \_ -> rule_I_A_3 Bank_of_England |> Expect.equal IA33
-        , test "European_Central_Bank" <| \_ -> rule_I_A_3 European_Central_Bank |> Expect.equal IA34
-        , test "Bank_of_Japan" <| \_ -> rule_I_A_3 Bank_of_Japan |> Expect.equal IA35
-        , test "Reserve_Bank_of_Australia" <| \_ -> rule_I_A_3 Reserve_Bank_of_Australia |> Expect.equal IA36
-        , test "Bank_of_Canada" <| \_ -> rule_I_A_3 Bank_of_Canada |> Expect.equal IA37
-        , test "Peoples_Bank_of_China" <| \_ -> rule_I_A_3 Peoples_Bank_of_China |> Expect.equal IA38
-        , test "Banco_Central_Do_Brasil" <| \_ -> rule_I_A_3 Banco_Central_Do_Brasil |> Expect.equal IA38
+        [ test "Federal_Reserve_Bank" <| \_ -> rule_I_A_3 Federal_Reserve_Bank |> Expect.equal [ "3", "1" ]
+        , test "Swiss_National_Bank" <| \_ -> rule_I_A_3 Swiss_National_Bank |> Expect.equal [ "3", "2" ]
+        , test "Bank_of_England" <| \_ -> rule_I_A_3 Bank_of_England |> Expect.equal [ "3", "3" ]
+        , test "European_Central_Bank" <| \_ -> rule_I_A_3 European_Central_Bank |> Expect.equal [ "3", "4" ]
+        , test "Bank_of_Japan" <| \_ -> rule_I_A_3 Bank_of_Japan |> Expect.equal [ "3", "5" ]
+        , test "Reserve_Bank_of_Australia" <| \_ -> rule_I_A_3 Reserve_Bank_of_Australia |> Expect.equal [ "3", "6" ]
+        , test "Bank_of_Canada" <| \_ -> rule_I_A_3 Bank_of_Canada |> Expect.equal [ "3", "7" ]
+        , test "Peoples_Bank_of_China" <| \_ -> rule_I_A_3 Peoples_Bank_of_China |> Expect.equal [ "3", "8" ]
+        , test "Banco_Central_Do_Brasil" <| \_ -> rule_I_A_3 Banco_Central_Do_Brasil |> Expect.equal [ "3", "8" ]
 
-        --, test "Other_Cash_Currency_And_Coin" <| \_ -> rule_I_A_3 FRB |> Expect.equal IA39
+        --, test "Other_Cash_Currency_And_Coin" <| \_ -> rule_I_A_3 FRB |> Expect.equal "I.A.3.9"
         ]
 
 
 rule_I_A_4Test : Test
 rule_I_A_4Test =
     describe "Rule I.A.4 Test"
-        [ test "Federal_Reserve_Bank" <| \_ -> rule_I_A_4 Federal_Reserve_Bank |> Expect.equal IA41
-        , test "Swiss_National_Bank" <| \_ -> rule_I_A_4 Swiss_National_Bank |> Expect.equal IA42
-        , test "Bank_of_England" <| \_ -> rule_I_A_4 Bank_of_England |> Expect.equal IA43
-        , test "European_Central_Bank" <| \_ -> rule_I_A_4 European_Central_Bank |> Expect.equal IA44
-        , test "Bank_of_Japan" <| \_ -> rule_I_A_4 Bank_of_Japan |> Expect.equal IA45
-        , test "Reserve_Bank_of_Australia" <| \_ -> rule_I_A_4 Reserve_Bank_of_Australia |> Expect.equal IA46
-        , test "Bank_of_Canada" <| \_ -> rule_I_A_4 Bank_of_Canada |> Expect.equal IA47
-        , test "Peoples_Bank_of_China" <| \_ -> rule_I_A_4 Peoples_Bank_of_China |> Expect.equal IA48
-        , test "Banco_Central_Do_Brasil" <| \_ -> rule_I_A_4 Banco_Central_Do_Brasil |> Expect.equal IA48
+        [ test "Federal_Reserve_Bank" <| \_ -> rule_I_A_4 Federal_Reserve_Bank |> Expect.equal [ "4", "1" ]
+        , test "Swiss_National_Bank" <| \_ -> rule_I_A_4 Swiss_National_Bank |> Expect.equal [ "4", "2" ]
+        , test "Bank_of_England" <| \_ -> rule_I_A_4 Bank_of_England |> Expect.equal [ "4", "3" ]
+        , test "European_Central_Bank" <| \_ -> rule_I_A_4 European_Central_Bank |> Expect.equal [ "4", "4" ]
+        , test "Bank_of_Japan" <| \_ -> rule_I_A_4 Bank_of_Japan |> Expect.equal [ "4", "5" ]
+        , test "Reserve_Bank_of_Australia" <| \_ -> rule_I_A_4 Reserve_Bank_of_Australia |> Expect.equal [ "4", "6" ]
+        , test "Bank_of_Canada" <| \_ -> rule_I_A_4 Bank_of_Canada |> Expect.equal [ "4", "7" ]
+        , test "Peoples_Bank_of_China" <| \_ -> rule_I_A_4 Peoples_Bank_of_China |> Expect.equal [ "4", "8" ]
+        , test "Banco_Central_Do_Brasil" <| \_ -> rule_I_A_4 Banco_Central_Do_Brasil |> Expect.equal [ "4", "8" ]
 
-        --, test "Other_Cash_Currency_And_Coin" <| \_ -> rule_I_A_3 FRB |> Expect.equal IA39
+        --, test "Other_Cash_Currency_And_Coin" <| \_ -> rule_I_A_3 FRB |> Expect.equal ["4","9"]
         ]
 
 
@@ -138,16 +138,16 @@ rules_I_ATest =
             "Other"
     in
     describe "Rules I.A Test"
-        [ test "Not Seg Cash Federal_Reserve_Bank" <| \_ -> rules_I_A notSegCash Federal_Reserve_Bank |> Debug.toString |> String.left 8 |> Expect.equal "Just IA3"
-        , test "Seg Cash Federal_Reserve_Bank" <| \_ -> rules_I_A segCash Federal_Reserve_Bank |> Debug.toString |> String.left 8 |> Expect.equal "Just IA4"
+        [ test "Not Seg Cash Federal_Reserve_Bank" <| \_ -> rules_I_A notSegCash Federal_Reserve_Bank |> toString |> String.left 5 |> Expect.equal "I.A.3"
+        , test "Seg Cash Federal_Reserve_Bank" <| \_ -> rules_I_A segCash Federal_Reserve_Bank |> toString |> String.left 5 |> Expect.equal "I.A.4"
         ]
 
 
 classifyTest : Test
 classifyTest =
     describe "6G classification test"
-        [ test "I.A.3.1" <| \_ -> classify centralBanks { cashflow | tenQLevel4 = "            ", partyId = "fed" } |> Expect.equal (Just IA31)
-        , test "I.A.3.8" <| \_ -> classify centralBanks { cashflow | tenQLevel4 = "            ", partyId = "lux" } |> Expect.equal (Just IA38)
-        , test "I.A.4.1" <| \_ -> classify centralBanks { cashflow | tenQLevel4 = segregatedCash, partyId = "fed" } |> Expect.equal (Just IA41)
-        , test "I.A.4.2" <| \_ -> classify centralBanks { cashflow | tenQLevel4 = segregatedCash, partyId = "swiss" } |> Expect.equal (Just IA42)
+        [ test "I.A.3.1" <| \_ -> classify centralBanks { cashflow | tenQLevel4 = "            ", partyId = "fed" } |> toString |> Expect.equal "I.A.3.1"
+        , test "I.A.3.8" <| \_ -> classify centralBanks { cashflow | tenQLevel4 = "            ", partyId = "lux" } |> toString |> Expect.equal "I.A.3.8"
+        , test "I.A.4.1" <| \_ -> classify centralBanks { cashflow | tenQLevel4 = segregatedCash, partyId = "fed" } |> toString |> Expect.equal "I.A.4.1"
+        , test "I.A.4.2" <| \_ -> classify centralBanks { cashflow | tenQLevel4 = segregatedCash, partyId = "swiss" } |> toString |> Expect.equal "I.A.4.2"
         ]

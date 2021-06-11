@@ -107,6 +107,6 @@ classifyTest =
             cashflow
     in
     describe "6G classification test"
-        [ test "I.A.3.1" <| \_ -> classify { c | partyId = "fed" } centralBanks |> Expect.equal IA31
-        , test "I.A.3.2" <| \_ -> classify { c | partyId = "swiss" } centralBanks |> Expect.equal IA32
+        [ test "I.A.4.1" <| \_ -> classify { c | partyId = "fed" } centralBanks |> Expect.equal IA41
+        , test "I.A.4.2" <| \_ -> classify { c | partyId = "swiss" } centralBanks |> Expect.equal IA42
         ]
