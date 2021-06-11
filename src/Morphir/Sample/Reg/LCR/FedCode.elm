@@ -212,7 +212,7 @@ classify cashflow centralBanks =
     case partyAsCentralBank of
         -- It is a central bank
         Just centralBank ->
-            if cashflow.tenQLevel6 == "Segregated Cash" then
+            if cashflow.tenQLevel6 /= "Segregated Cash" then
                 case centralBankToSubProduct centralBank of
                     FRB ->
                         IA31

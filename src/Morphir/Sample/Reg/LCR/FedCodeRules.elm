@@ -134,31 +134,13 @@ type alias Cashflow =
     }
 
 
-type RuleCode
-    = IA31
-    | IA32
-    | IA33
-    | IA34
-    | IA35
-    | IA36
-    | IA37
-    | IA38
-    | IA39
-    | IA41
-    | IA42
-    | IA43
-    | IA44
-    | IA45
-    | IA46
-    | IA47
-    | IA48
-    | IA49
-    | IU1
-    | IU2
-    | IU4
-    | OW9
-    | OW10
-    | Unclassified
+type alias RuleCode =
+    List String
+
+
+toString : RuleCode -> String
+toString rulecode =
+    rulecode |> String.join "."
 
 
 type CentralBankSubProduct
@@ -173,7 +155,7 @@ type CentralBankSubProduct
     | Other_Cash_Currency_And_Coin
 
 
-classify : Dict PartyID CentralBank -> Cashflow -> Maybe RuleCode
+classify : Dict PartyID CentralBank -> Cashflow -> RuleCode
 classify centralBanks cashflow =
     let
         partyIsCentralBank : Maybe CentralBank
@@ -190,99 +172,110 @@ classify centralBanks cashflow =
                 rule_I_U cashflow.amountUSD cashflow.legalEntity.country cashflow.currency cashflow.counterparty.country
 
             else
-                Nothing
+                []
 
 
 
 --rules_I_A : TenQLevel4 -> CentralBank -> Maybe RuleCode
 
 
-rules_I_A : String -> CentralBank -> Maybe RuleCode
+rules_I_A : String -> CentralBank -> RuleCode
 rules_I_A tenQLevel4 centralBank =
-    if tenQLevel4 == segregatedCash then
-        Just (rule_I_A_4 centralBank)
+    List.append [ "I", "A" ]
+        (if tenQLevel4 == segregatedCash then
+            rule_I_A_4 centralBank
 
-    else
-        Just (rule_I_A_3 centralBank)
+         else
+            rule_I_A_3 centralBank
+        )
 
 
 rule_I_A_3 : CentralBank -> RuleCode
 rule_I_A_3 centralBank =
-    case centralBankToSubProduct centralBank of
-        FRB ->
-            IA31
+    List.append [ "3" ]
+        (case centralBankToSubProduct centralBank of
+            FRB ->
+                [ "1" ]
 
-        SNB ->
-            IA32
+            SNB ->
+                [ "2" ]
 
-        BOE ->
-            IA33
+            BOE ->
+                [ "3" ]
 
-        ECB ->
-            IA34
+            ECB ->
+                [ "4" ]
 
-        BOJ ->
-            IA35
+            BOJ ->
+                [ "5" ]
 
-        RBA ->
-            IA36
+            RBA ->
+                [ "6" ]
 
-        BOC ->
-            IA37
+            BOC ->
+                [ "7" ]
 
-        OCB ->
-            IA38
+            OCB ->
+                [ "8" ]
 
-        Other_Cash_Currency_And_Coin ->
-            IA39
+            Other_Cash_Currency_And_Coin ->
+                [ "9" ]
+        )
 
 
 rule_I_A_4 : CentralBank -> RuleCode
 rule_I_A_4 centralBank =
-    case centralBankToSubProduct centralBank of
-        FRB ->
-            IA41
+    List.append [ "4" ]
+        (case centralBankToSubProduct centralBank of
+            FRB ->
+                [ "1" ]
 
-        SNB ->
-            IA42
+            SNB ->
+                [ "2" ]
 
-        BOE ->
-            IA43
+            BOE ->
+                [ "3" ]
 
-        ECB ->
-            IA44
+            ECB ->
+                [ "4" ]
 
-        BOJ ->
-            IA45
+            BOJ ->
+                [ "5" ]
 
-        RBA ->
-            IA46
+            RBA ->
+                [ "6" ]
 
-        BOC ->
-            IA47
+            BOC ->
+                [ "7" ]
 
-        OCB ->
-            IA48
+            OCB ->
+                [ "8" ]
 
-        Other_Cash_Currency_And_Coin ->
-            IA49
-
-
-
---rule_I_U : AdjustedAmountUSD -> Country -> Currency -> Country -> Maybe RuleCode
+            Other_Cash_Currency_And_Coin ->
+                [ "9" ]
+        )
 
 
-rule_I_U : Float -> Country -> Currency -> Country -> Maybe RuleCode
+
+--rule_I_U : AdjustedAmountUSD -> Country -> Currency -> Country -> RuleCode
+
+
+rule_I_U : Float -> Country -> Currency -> Country -> RuleCode
 rule_I_U adjustedAmountUSD legalEntityCountry cashflowCurrency counterpartyCountry =
-    if netCashUSD adjustedAmountUSD >= 0 then
-        if isOnshore legalEntityCountry cashflowCurrency counterpartyCountry then
-            Just IU1
+    let
+        tail : String
+        tail =
+            if netCashUSD adjustedAmountUSD >= 0 then
+                if isOnshore legalEntityCountry cashflowCurrency counterpartyCountry then
+                    "1"
 
-        else
-            Just IU2
+                else
+                    "2"
 
-    else
-        Just IU4
+            else
+                "4"
+    in
+    List.append [ "I", "U" ] [ tail ]
 
 
 centralBankToSubProduct : CentralBank -> CentralBankSubProduct
