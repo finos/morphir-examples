@@ -23,6 +23,7 @@ module Morphir.Sample.Reg.LCR.FedSampleTest exposing (..)
 import Array
 import Date exposing (Interval(..), Unit(..))
 import Expect
+import Morphir.Sample.Reg.Currency exposing (Currency(..))
 import Morphir.Sample.Reg.LCR.Basics exposing (..)
 import Morphir.Sample.Reg.LCR.Calculations exposing (..)
 import Morphir.Sample.Reg.LCR.Counterparty exposing (..)
@@ -58,8 +59,8 @@ paperSample =
               , businessDate = t1
               , collateralClass = Level1Assets
               , counterpartyId = cptyId
-              , currency = "USD"
-              , fed5GCode = "O.W.1"
+              , currency = USD
+              , ruleCode = [ "O", "W", "1" ]
               , insured = FDIC
               , isTreasuryControl = True
               , isUnencumbered = True
@@ -79,8 +80,8 @@ paperSample =
                         , businessDate = date
                         , collateralClass = Level1Assets
                         , counterpartyId = cptyId
-                        , currency = "USD"
-                        , fed5GCode = "O.O.22"
+                        , currency = USD
+                        , ruleCode = [ "O", "O", "22" ]
                         , insured = FDIC
                         , isTreasuryControl = True
                         , isUnencumbered = True
@@ -100,8 +101,8 @@ paperSample =
                         , businessDate = date
                         , collateralClass = Level1Assets
                         , counterpartyId = cptyId
-                        , currency = "USD"
-                        , fed5GCode = "I.O.6"
+                        , currency = USD
+                        , ruleCode = [ "I", "O", "6" ]
                         , insured = FDIC
                         , isTreasuryControl = True
                         , isUnencumbered = True
@@ -117,8 +118,8 @@ paperSample =
               , businessDate = t1
               , collateralClass = Level1Assets
               , counterpartyId = cptyId
-              , currency = "USD"
-              , fed5GCode = "1.O.7"
+              , currency = USD
+              , ruleCode = [ "1", "O", "7" ]
               , insured = FDIC
               , isTreasuryControl = True
               , isUnencumbered = True

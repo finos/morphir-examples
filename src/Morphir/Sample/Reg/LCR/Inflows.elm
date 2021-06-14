@@ -115,7 +115,7 @@ isRule20c flow =
 
 isRule33b : { a | ruleCode : RuleCode } -> Bool
 isRule33b cashflow =
-    cashflow.ruleCode == [ "1", "O", "7" ]
+    cashflow.ruleCode == [ "I", "O", "7" ]
 
 
 isRule33c : (Flow -> Counterparty) -> LocalDate -> Flow -> Bool
