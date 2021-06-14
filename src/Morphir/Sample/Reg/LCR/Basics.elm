@@ -18,9 +18,7 @@
 module Morphir.Sample.Reg.LCR.Basics exposing
     ( AssetCategoryCodes(..)
     , Balance
-    , Currency
     , Entity
-    , Fed5GCode
     , InsuranceType(..)
     , Ratio
     )
@@ -28,6 +26,8 @@ module Morphir.Sample.Reg.LCR.Basics exposing
 {-| Asset categories apply to the flows and are specified in the spec.
 There are a bunch of them, but we're only concerned with these three in this example .
 -}
+
+import Morphir.Sample.Reg.Currency exposing (Currency(..))
 
 
 type AssetCategoryCodes
@@ -48,10 +48,6 @@ type alias Entity =
     String
 
 
-type alias Currency =
-    String
-
-
 type alias Balance =
     Float
 
@@ -60,16 +56,12 @@ type alias Ratio =
     Float
 
 
-type alias Fed5GCode =
-    String
-
-
 {-| A currency isn't always itself in 5G.
 -}
 fed5GCurrency : Currency -> Currency
 fed5GCurrency currency =
-    if List.member currency [ "USD", "EUR", "GBP", "CHF", "JPY", "AUD", "CAD" ] then
+    if List.member currency [ USD, EUR, GBP, CHF, JPY, AUD, CAD ] then
         currency
 
     else
-        "USD"
+        USD

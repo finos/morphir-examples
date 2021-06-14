@@ -18,8 +18,10 @@
 module Morphir.Sample.Reg.LCR.Flows exposing (Amount, BusinessDate, Flow, ReportingEntity)
 
 import Morphir.SDK.LocalDate exposing (LocalDate)
+import Morphir.Sample.Reg.Currency exposing (Currency)
 import Morphir.Sample.Reg.LCR.Basics exposing (..)
 import Morphir.Sample.Reg.LCR.Counterparty exposing (CounterpartyId)
+import Morphir.Sample.Reg.LCR.FedCodeRules exposing (RuleCode)
 import Morphir.Sample.Reg.LCR.Product exposing (ProductId)
 
 
@@ -42,7 +44,7 @@ type alias Flow =
     , collateralClass : AssetCategoryCodes
     , counterpartyId : CounterpartyId
     , currency : Currency
-    , fed5GCode : Fed5GCode
+    , ruleCode : RuleCode
     , insured : InsuranceType
     , isTreasuryControl : Bool
     , isUnencumbered : Bool

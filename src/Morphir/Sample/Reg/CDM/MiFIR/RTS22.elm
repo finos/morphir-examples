@@ -25,6 +25,7 @@ import Morphir.Sample.Reg.CDM.MiFIR.Basics exposing (..)
 import Morphir.Sample.Reg.CDM.MiFIR.Enums exposing (..)
 import Morphir.Sample.Reg.CDM.MiFIR.FloatingRateIndexEnum exposing (FloatingRateIndexEnum(..))
 import Morphir.Sample.Reg.CDM.MiFIR.Quantities exposing (NonNegativeQuantity)
+import Morphir.Sample.Reg.Currency exposing (Currency)
 import Morphir.Sample.Reg.LCR.Flows exposing (Amount)
 
 
@@ -52,9 +53,11 @@ type alias PriceNotation =
 priceNotation : Price -> Maybe AssetIdentifier -> Result String PriceNotation
 priceNotation price mAssetIdentifier =
     let
+        currencyExists : Bool
         currencyExists =
             mAssetIdentifier |> Maybe.map .currency |> exists
 
+        rateOptionExists : Bool
         rateOptionExists =
             mAssetIdentifier |> Maybe.map .rateOption |> exists
     in
@@ -239,10 +242,6 @@ type alias ProductIdentifier =
     }
 
 
-type alias Currency =
-    String
-
-
 type alias Product =
     { contractualProduct : ContractualProduct
     }
@@ -332,9 +331,11 @@ mapTrade : Trade -> Maybe Report
 mapTrade trade =
     let
         -- What should happen if any of the optional prices are not present?  Skip or error?
+        price : Maybe Number
         price =
             priceOf trade
 
+        quantity : Amount
         quantity =
             trade.tradableProduct.quantityNotation |> Nonempty.head |> .quantity |> .amount
     in
@@ -345,6 +346,7 @@ mapTrade trade =
 assetIdentifier : Maybe ProductIdentifier -> Maybe Currency -> Maybe FloatingRateOption -> Result String AssetIdentifier
 assetIdentifier mProductId mCurrency mRateOption =
     let
+        isValid : Bool
         isValid =
             case ( mProductId, mCurrency, mRateOption ) of
                 ( Just p, Nothing, Nothing ) ->
@@ -412,6 +414,7 @@ priceType trade =
 isFixedFixed : Trade -> Bool
 isFixedFixed trade =
     let
+        count : Int
         count =
             trade.tradableProduct.product.contractualProduct.economicTerms.payout.interestRatePayout
                 |> Maybe.map (\x -> x.rateSpecification.fixedRate)
@@ -443,12 +446,14 @@ fixedFixedPrice trade =
 isFixedFloat : Trade -> Bool
 isFixedFloat trade =
     let
+        fixedCount : Int
         fixedCount =
             trade.tradableProduct.product.contractualProduct.economicTerms.payout.interestRatePayout
                 |> Maybe.map (\x -> x.rateSpecification.fixedRate)
                 |> Maybe.withDefault []
                 |> List.length
 
+        floatingCount : Int
         floatingCount =
             trade.tradableProduct.product.contractualProduct.economicTerms.payout.interestRatePayout
                 |> Maybe.map (\x -> x.rateSpecification.floatingRate)
@@ -475,6 +480,7 @@ fixedFloatPrice trade =
 isIRSwapBasis : Trade -> Bool
 isIRSwapBasis trade =
     let
+        count : Int
         count =
             trade.tradableProduct.product.contractualProduct.economicTerms.payout.interestRatePayout
                 |> Maybe.map (\x -> x.rateSpecification.floatingRate)
@@ -505,18 +511,21 @@ isCreditDefaultSwap trade =
 cdsPrice : Trade -> Maybe Number
 cdsPrice trade =
     let
+        mp : Maybe Price
         mp =
             trade.tradableProduct.priceNotation
                 |> Nonempty.toList
                 |> List.head
                 |> Maybe.map .price
 
+        fixedRate : Maybe Number
         fixedRate =
             mp
                 |> Maybe.map .fixedInterestRate
                 |> Maybe.withDefault Nothing
                 |> Maybe.map .rate
 
+        floatingRate : Maybe (Maybe Number)
         floatingRate =
             mp
                 |> Maybe.map .floatingInterestRate
