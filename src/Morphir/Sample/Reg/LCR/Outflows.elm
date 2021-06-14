@@ -64,7 +64,7 @@ outflowRules counterparty t =
 
 isRule32a1 : Flow -> Bool
 isRule32a1 flow =
-    List.member flow.fed5GCode [ "O.D.1", "O.D.2" ]
+    List.member flow.ruleCode [ [ "O", "D", "1" ], [ "O", "D", "2" ] ]
         && flow.insured
         == FDIC
 
@@ -76,13 +76,13 @@ isRule32a2 counterparty flow =
         cpty =
             counterparty flow
     in
-    (List.member flow.fed5GCode [ "O.D.1", "O.D.2" ]
+    (List.member flow.ruleCode [ [ "O", "D", "1" ], [ "O", "D", "2" ] ]
         && List.member cpty.counterpartyType [ Retail, SmallBusiness ]
         && flow.insured
         /= FDIC
     )
-        || (flow.fed5GCode
-                == "O.D.3"
+        || (flow.ruleCode
+                == [ "O", "D", "3" ]
                 && List.member cpty.counterpartyType [ Retail, SmallBusiness ]
            )
 
@@ -94,8 +94,8 @@ isRule32a3 counterparty flow =
         cpty =
             counterparty flow
     in
-    flow.fed5GCode
-        == "O.D.12"
+    flow.ruleCode
+        == [ "O", "D", "12" ]
         && List.member cpty.counterpartyType [ Retail, SmallBusiness ]
         && flow.insured
         == FDIC
@@ -108,8 +108,8 @@ isRule32a4 counterparty flow =
         cpty =
             counterparty flow
     in
-    flow.fed5GCode
-        == "O.D.12"
+    flow.ruleCode
+        == [ "O", "D", "12" ]
         && List.member cpty.counterpartyType [ Retail, SmallBusiness ]
         && flow.insured
         /= FDIC
@@ -122,33 +122,33 @@ isRule32a5 counterparty flow =
         cpty =
             counterparty flow
     in
-    List.member flow.fed5GCode [ "O.D.13", "O.W.18" ]
+    List.member flow.ruleCode [ [ "O", "D", "13" ], [ "O", "W", "18" ] ]
         && List.member cpty.counterpartyType [ Retail, SmallBusiness ]
 
 
 isRule32b : Flow -> Bool
 isRule32b flow =
-    List.member flow.fed5GCode [ "O.W.1", "O.W.2", "O.W.4", "O.O.21" ]
+    List.member flow.ruleCode [ [ "O", "W", "1" ], [ "O", "W", "2" ], [ "O", "W", "4" ], [ "O", "O", "21" ] ]
 
 
 isRule32c : Flow -> Bool
 isRule32c flow =
-    flow.fed5GCode == "O.O.20"
+    flow.ruleCode == [ "O", "O", "20" ]
 
 
 isRule32d : Flow -> Bool
 isRule32d flow =
-    flow.fed5GCode == "O.O.6"
+    flow.ruleCode == [ "O", "O", "6" ]
 
 
 isRule32e : Flow -> Bool
 isRule32e flow =
-    flow.fed5GCode == "O.O.6"
+    flow.ruleCode == [ "O", "O", "6" ]
 
 
 isRule32f : Flow -> Bool
 isRule32f flow =
-    flow.fed5GCode == "O.O.6"
+    flow.ruleCode == [ "O", "O", "6" ]
 
 
 isRule32g1 : (Flow -> Counterparty) -> LocalDate -> Flow -> Bool
@@ -162,8 +162,8 @@ isRule32g1 counterparty t flow =
         remainingDays =
             daysToMaturity t flow.maturityDate
     in
-    flow.fed5GCode
-        == "O.D.7"
+    flow.ruleCode
+        == [ "O", "D", "7" ]
         && (cpty.counterpartyType == Retail || cpty.counterpartyType == SmallBusiness)
         && (0 < remainingDays && remainingDays <= 30)
 
@@ -175,8 +175,8 @@ isRule32g2 counterparty t flow =
         cpty =
             counterparty flow
     in
-    flow.fed5GCode
-        == "O.D.7"
+    flow.ruleCode
+        == [ "O", "D", "7" ]
         && (cpty.counterpartyType == Retail || cpty.counterpartyType == SmallBusiness)
         && daysToMaturity t flow.maturityDate
         <= 30
@@ -189,8 +189,8 @@ isRule32g3 counterparty t flow =
         cpty =
             counterparty flow
     in
-    flow.fed5GCode
-        == "O.D.7"
+    flow.ruleCode
+        == [ "O", "D", "7" ]
         && (cpty.counterpartyType == Retail || cpty.counterpartyType == SmallBusiness)
         && daysToMaturity t flow.maturityDate
         == 0
@@ -205,8 +205,8 @@ isRule32g4 counterparty t flow =
         cpty =
             counterparty flow
     in
-    flow.fed5GCode
-        == "O.D.7"
+    flow.ruleCode
+        == [ "O", "D", "7" ]
         && (cpty.counterpartyType == Retail || cpty.counterpartyType == SmallBusiness)
         && daysToMaturity t flow.maturityDate
         == 0
@@ -221,8 +221,8 @@ isRule32g5 counterparty flow =
         cpty =
             counterparty flow
     in
-    flow.fed5GCode
-        == "O.D.11"
+    flow.ruleCode
+        == [ "O", "D", "11" ]
         && (cpty.counterpartyType == Retail || cpty.counterpartyType == SmallBusiness)
         && flow.insured
         == FDIC
@@ -235,8 +235,8 @@ isRule32g6 counterparty flow =
         cpty =
             counterparty flow
     in
-    flow.fed5GCode
-        == "O.D.11"
+    flow.ruleCode
+        == [ "O", "D", "11" ]
         && (cpty.counterpartyType == Retail || cpty.counterpartyType == SmallBusiness)
         && flow.insured
         /= FDIC
@@ -249,8 +249,8 @@ isRule32g7 counterparty flow =
         cpty =
             counterparty flow
     in
-    flow.fed5GCode
-        == "O.D.8"
+    flow.ruleCode
+        == [ "O", "D", "8" ]
         && (cpty.counterpartyType == Retail || cpty.counterpartyType == SmallBusiness)
         && flow.insured
         == FDIC
@@ -263,8 +263,8 @@ isRule32g8 counterparty flow =
         cpty =
             counterparty flow
     in
-    flow.fed5GCode
-        == "O.D.9"
+    flow.ruleCode
+        == [ "O", "D", "9" ]
         && (cpty.counterpartyType == Retail || cpty.counterpartyType == SmallBusiness)
         && flow.insured
         == FDIC
@@ -277,7 +277,7 @@ isRule32g9 counterparty flow =
         cpty =
             counterparty flow
     in
-    (flow.fed5GCode == "O.D.8" || flow.fed5GCode == "O.D.9")
+    (flow.ruleCode == [ "O", "D", "8" ] || flow.ruleCode == [ "O", "D", "9" ])
         && (cpty.counterpartyType == Retail || cpty.counterpartyType == SmallBusiness)
         && flow.insured
         /= FDIC
@@ -299,8 +299,8 @@ isRule32h3 counterparty flow =
         cpty =
             counterparty flow
     in
-    flow.fed5GCode
-        == "O.D.4"
+    flow.ruleCode
+        == [ "O", "D", "4" ]
         && List.member cpty.counterpartyType
             [ NonFinancialCorporate
             , Sovereign
@@ -326,8 +326,8 @@ isRule32h4 counterparty flow =
         cpty =
             counterparty flow
     in
-    flow.fed5GCode
-        == "O.D.4"
+    flow.ruleCode
+        == [ "O", "D", "4" ]
         && List.member cpty.counterpartyType
             [ NonFinancialCorporate
             , Sovereign
@@ -363,7 +363,7 @@ isRule32h4 counterparty flow =
 
 isRule32l : Flow -> Bool
 isRule32l flow =
-    flow.fed5GCode == "O.O.22"
+    flow.ruleCode == [ "O", "O", "22" ]
 
 
 isRule33f1iii : LocalDate -> Flow -> Bool
@@ -373,7 +373,7 @@ isRule33f1iii t flow =
         days =
             daysToMaturity t flow.effectiveMaturityDate
     in
-    List.member flow.fed5GCode [ "I.S.1", "I.S.2", "I.S.5", "I.S.6", "I.S.7" ]
+    List.member flow.ruleCode [ [ "I", "S", "1" ], [ "I", "S", "2" ], [ "I", "S", "5" ], [ "I", "S", "6" ], [ "I", "S", "7" ] ]
         && flow.assetType
         == Level1Assets
         && (0 < days && days <= 30)
@@ -386,7 +386,7 @@ isRule33f1iv t flow =
         days =
             daysToMaturity t flow.effectiveMaturityDate
     in
-    List.member flow.fed5GCode [ "I.S.1", "I.S.2", "I.S.5", "I.S.6", "I.S.7" ]
+    List.member flow.ruleCode [ [ "I", "S", "1" ], [ "I", "S", "2" ], [ "I", "S", "5" ], [ "I", "S", "6" ], [ "I", "S", "7" ] ]
         && flow.assetType
         == Level2aAssets
         && (0 < days && days <= 30)

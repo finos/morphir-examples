@@ -20,6 +20,7 @@ module Morphir.Sample.Reg.LCR.Inflows exposing (..)
 import Morphir.SDK.LocalDate exposing (LocalDate)
 import Morphir.Sample.Reg.LCR.Basics exposing (..)
 import Morphir.Sample.Reg.LCR.Counterparty exposing (..)
+import Morphir.Sample.Reg.LCR.FedCodeRules exposing (RuleCode)
 import Morphir.Sample.Reg.LCR.Flows exposing (..)
 import Morphir.Sample.Reg.LCR.MaturityBucket exposing (..)
 import Morphir.Sample.Reg.LCR.Rules exposing (..)
@@ -52,19 +53,19 @@ inflowRules toCounterparty t =
 
 isRule20a1 : LocalDate -> Flow -> Bool
 isRule20a1 t flow =
-    List.member flow.fed5GCode [ "I.A.3.1", "I.A.3.2", "I.A.3.3", "I.A.3.4", "I.A.3.5", "I.A.3.6", "I.A.3.7", "I.A.3.8" ]
+    List.member flow.ruleCode [ [ "I", "A", "3", "1" ], [ "I", "A", "3", "2" ], [ "I", "A", "3", "3" ], [ "I", "A", "3", "4" ], [ "I", "A", "3", "5" ], [ "I", "A", "3", "6" ], [ "I", "A", "3", "7" ], [ "I", "A", "3", "8" ] ]
         && daysToMaturity t flow.maturityDate
         == 0
 
 
 isRule20a3dash6 : Flow -> Bool
 isRule20a3dash6 flow =
-    (List.member flow.fed5GCode [ "I.A.1", "I.A.2" ]
+    (List.member flow.ruleCode [ [ "I", "A", "1" ], [ "I", "A", "2" ] ]
         && flow.collateralClass
         == Level1Assets
         && flow.isTreasuryControl
     )
-        || (List.member flow.fed5GCode [ "I.S.1", "I.S.2", "I.S.4" ]
+        || (List.member flow.ruleCode [ [ "I", "S", "1" ], [ "I", "S", "2" ], [ "I", "S", "4" ] ]
                 && flow.collateralClass
                 == Level1Assets
                 && flow.isTreasuryControl
@@ -74,22 +75,22 @@ isRule20a3dash6 flow =
 
 isRule22b3L2a : Flow -> Bool
 isRule22b3L2a flow =
-    flow.fed5GCode == "S.I.19" && flow.collateralClass == Level2aAssets
+    flow.ruleCode == [ "S", "I", "19" ] && flow.collateralClass == Level2aAssets
 
 
 isRule22b3L2b : Flow -> Bool
 isRule22b3L2b flow =
-    flow.fed5GCode == "S.I.19" && flow.collateralClass == Level2bAssets
+    flow.ruleCode == [ "S", "I", "19" ] && flow.collateralClass == Level2bAssets
 
 
 isRule20b : Flow -> Bool
 isRule20b flow =
-    (List.member flow.fed5GCode [ "I.A.1", "I.A.2" ]
+    (List.member flow.ruleCode [ [ "I", "A", "1" ], [ "I", "A", "2" ] ]
         && flow.collateralClass
         == Level2aAssets
         && flow.isTreasuryControl
     )
-        || (List.member flow.fed5GCode [ "I.S.1", "I.S.2", "I.S.4" ]
+        || (List.member flow.ruleCode [ [ "I", "S", "1" ], [ "I", "S", "2" ], [ "I", "S", "4" ] ]
                 && flow.collateralClass
                 == Level2aAssets
                 && flow.isTreasuryControl
@@ -99,12 +100,12 @@ isRule20b flow =
 
 isRule20c : Flow -> Bool
 isRule20c flow =
-    (List.member flow.fed5GCode [ "I.A.1", "I.A.2" ]
+    (List.member flow.ruleCode [ [ "I", "A", "1" ], [ "I", "A", "2" ] ]
         && flow.collateralClass
         == Level2bAssets
         && flow.isTreasuryControl
     )
-        || (List.member flow.fed5GCode [ "I.S.1", "I.S.2", "I.S.4" ]
+        || (List.member flow.ruleCode [ [ "I", "S", "1" ], [ "I", "S", "2" ], [ "I", "S", "4" ] ]
                 && flow.collateralClass
                 == Level2bAssets
                 && flow.isTreasuryControl
@@ -112,9 +113,9 @@ isRule20c flow =
            )
 
 
-isRule33b : { a | fed5GCode : String } -> Bool
+isRule33b : { a | ruleCode : RuleCode } -> Bool
 isRule33b cashflow =
-    cashflow.fed5GCode == "1.O.7"
+    cashflow.ruleCode == [ "1", "O", "7" ]
 
 
 isRule33c : (Flow -> Counterparty) -> LocalDate -> Flow -> Bool
@@ -128,11 +129,11 @@ isRule33c toCounterparty t flow =
         days =
             daysToMaturity t flow.maturityDate
     in
-    (List.member flow.fed5GCode [ "I.U.5", "I.U.6" ]
+    (List.member flow.ruleCode [ [ "I", "U", "5" ], [ "I", "U", "6" ] ]
         && List.member cpty.counterpartyType [ Retail, SmallBusiness ]
         && (0 < days && days <= 30)
     )
-        || (List.member flow.fed5GCode [ "I.S.1", "I.S.2", "I.S.4", "I.S.5", "I.S.6", "I.S.7" ]
+        || (List.member flow.ruleCode [ [ "I", "S", "1" ], [ "I", "S", "2" ], [ "I", "S", "4" ], [ "I", "S", "5" ], [ "I", "S", "6" ], [ "I", "S", "7" ] ]
                 && cpty.counterpartyType
                 == Retail
                 && (0 < days && days <= 30)
@@ -146,8 +147,8 @@ isRule33d1 toCounterparty flow =
         cpty =
             toCounterparty flow
     in
-    List.member flow.fed5GCode [ "I.U.1", "I.U.2", "I.U.4" ]
-        || (List.member flow.fed5GCode [ "I.U.5", "I.U.6" ]
+    List.member flow.ruleCode [ [ "I", "U", "1" ], [ "I", "U", "2" ], [ "I", "U", "4" ] ]
+        || (List.member flow.ruleCode [ [ "I", "U", "5" ], [ "I", "U", "6" ] ]
                 && List.member cpty.counterpartyType
                     [ CentralBank
                     , Bank
@@ -165,7 +166,7 @@ isRule33d2 toCounterparty flow =
         cpty =
             toCounterparty flow
     in
-    List.member flow.fed5GCode [ "I.U.5", "I.U.6" ]
+    List.member flow.ruleCode [ [ "I", "U", "5" ], [ "I", "U", "6" ] ]
         && List.member cpty.counterpartyType
             [ NonFinancialCorporate
             , Sovereign
@@ -179,7 +180,7 @@ isRule33d2 toCounterparty flow =
 
 isRule33e : Flow -> Bool
 isRule33e cashflow =
-    cashflow.fed5GCode == "I.O.6" || cashflow.fed5GCode == "I.O.8"
+    cashflow.ruleCode == [ "I", "O", "6" ] || cashflow.ruleCode == [ "I", "O", "8" ]
 
 
 
@@ -188,11 +189,11 @@ isRule33e cashflow =
 --     Debug.todo "Rule 33(f) is actually a bunch of rules. Too many to do for now..."
 
 
-isRule33g : { a | fed5GCode : String, isTreasuryControl : Bool } -> Bool
+isRule33g : { a | ruleCode : RuleCode, isTreasuryControl : Bool } -> Bool
 isRule33g cashflow =
-    cashflow.fed5GCode == "I.O.5" && cashflow.isTreasuryControl
+    cashflow.ruleCode == [ "I", "O", "5" ] && cashflow.isTreasuryControl
 
 
-isRule33h : { a | fed5GCode : String, isTreasuryControl : Bool } -> Bool
+isRule33h : { a | ruleCode : RuleCode, isTreasuryControl : Bool } -> Bool
 isRule33h cashflow =
-    cashflow.fed5GCode == "I.O.9" && cashflow.isTreasuryControl
+    cashflow.ruleCode == [ "I", "O", "9" ] && cashflow.isTreasuryControl
