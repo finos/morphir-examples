@@ -137,17 +137,63 @@ rules_I_ATest =
         notSegCash =
             "Other"
     in
-    describe "Rules I.A Test"
+    describe "Rules I.A test"
         [ test "Not Seg Cash Federal_Reserve_Bank" <| \_ -> rules_I_A notSegCash Federal_Reserve_Bank |> toString |> String.left 5 |> Expect.equal "I.A.3"
         , test "Seg Cash Federal_Reserve_Bank" <| \_ -> rules_I_A segCash Federal_Reserve_Bank |> toString |> String.left 5 |> Expect.equal "I.A.4"
+        ]
+
+
+rule_I_UTest : Test
+rule_I_UTest =
+    describe "Rules I.U test"
+        [ test "negative and onshore" <| \_ -> rule_I_U -1 USA USD USA |> Expect.equal [ "I", "U", "4" ]
+        , test "negative and offshore" <| \_ -> rule_I_U -1 USA EUR USA |> Expect.equal [ "I", "U", "4" ]
+        , test "0 and onshore" <| \_ -> rule_I_U 0 USA USD USA |> Expect.equal [ "I", "U", "1" ]
+        , test "0 and offshore" <| \_ -> rule_I_U 0 USA EUR USA |> Expect.equal [ "I", "U", "2" ]
+        , test "positive and onshore" <| \_ -> rule_I_U 1 USA USD USA |> Expect.equal [ "I", "U", "1" ]
+        , test "positive and offshore 0" <| \_ -> rule_I_U 1 AUS USD USA |> Expect.equal [ "I", "U", "2" ]
+        , test "positive and offshore 1" <| \_ -> rule_I_U 1 USA EUR USA |> Expect.equal [ "I", "U", "2" ]
+        , test "positive and offshore 2" <| \_ -> rule_I_U 1 USA USD JPN |> Expect.equal [ "I", "U", "2" ]
         ]
 
 
 classifyTest : Test
 classifyTest =
     describe "6G classification test"
-        [ test "I.A.3.1" <| \_ -> classify centralBanks { cashflow | tenQLevel4 = "            ", partyId = "fed" } |> toString |> Expect.equal "I.A.3.1"
-        , test "I.A.3.8" <| \_ -> classify centralBanks { cashflow | tenQLevel4 = "            ", partyId = "lux" } |> toString |> Expect.equal "I.A.3.8"
-        , test "I.A.4.1" <| \_ -> classify centralBanks { cashflow | tenQLevel4 = segregatedCash, partyId = "fed" } |> toString |> Expect.equal "I.A.4.1"
-        , test "I.A.4.2" <| \_ -> classify centralBanks { cashflow | tenQLevel4 = segregatedCash, partyId = "swiss" } |> toString |> Expect.equal "I.A.4.2"
+        [ test "I.A.3.1" <| \_ -> classify centralBanks { cashflow | tenQLevel4 = "            ", partyId = "fed" } |> Expect.equal [ "I", "A", "3", "1" ]
+        , test "I.A.3.8" <| \_ -> classify centralBanks { cashflow | tenQLevel4 = "            ", partyId = "lux" } |> Expect.equal [ "I", "A", "3", "8" ]
+        , test "I.A.4.1" <| \_ -> classify centralBanks { cashflow | tenQLevel4 = segregatedCash, partyId = "fed" } |> Expect.equal [ "I", "A", "4", "1" ]
+        , test "I.A.4.2" <| \_ -> classify centralBanks { cashflow | tenQLevel4 = segregatedCash, partyId = "swiss" } |> Expect.equal [ "I", "A", "4", "2" ]
+        , test "I.U.1" <| \_ -> classify centralBanks { cashflow | tenQLevel5 = "CASH AND DUE FROM BANKS", partyId = "", amountUSD = 1, legalEntity = LegalEntity "" USA, counterparty = Counterparty USA "" "", currency = USD } |> Expect.equal [ "I", "U", "1" ]
+        , test "I.U.2" <| \_ -> classify centralBanks { cashflow | tenQLevel5 = "OVERNIGHT AND TERM DEPOSITS", partyId = "", amountUSD = 0, legalEntity = LegalEntity "" USA, counterparty = Counterparty USA "" "", currency = EUR } |> Expect.equal [ "I", "U", "2" ]
+        , test "I.U.4" <| \_ -> classify centralBanks { cashflow | tenQLevel5 = "CASH EQUIVALENTS", partyId = "", amountUSD = -1, legalEntity = LegalEntity "" USA, counterparty = Counterparty USA "" "", currency = USD } |> Expect.equal [ "I", "U", "4" ]
+        , test "unclassified" <| \_ -> classify centralBanks { cashflow | partyId = "", amountUSD = -1, legalEntity = LegalEntity "" USA, counterparty = Counterparty USA "" "", currency = USD } |> Expect.equal []
+        ]
+
+
+calculateTest : Test
+calculateTest =
+    let
+        c1 =
+            { cashflow | tenQLevel4 = "            ", partyId = "fed" }
+
+        c2 =
+            { cashflow | tenQLevel4 = "            ", partyId = "lux" }
+
+        c3 =
+            { cashflow | tenQLevel4 = segregatedCash, partyId = "fed" }
+
+        c4 =
+            { cashflow | tenQLevel4 = segregatedCash, partyId = "swiss" }
+    in
+    describe "6G calculation test"
+        [ test "I.A.3.1, I.A.3.8, I.A.4.1, I.A.4.2" <|
+            \_ ->
+                calculate centralBanks [ c1, c2, c3, c4 ]
+                    |> Expect.equal
+                        [ ( c1, [ "I", "A", "3", "1" ] )
+                        , ( c2, [ "I", "A", "3", "8" ] )
+                        , ( c3, [ "I", "A", "4", "1" ] )
+                        , ( c4, [ "I", "A", "4", "2" ] )
+                        ]
         ]
