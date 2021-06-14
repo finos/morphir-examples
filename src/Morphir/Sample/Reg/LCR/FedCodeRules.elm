@@ -155,6 +155,17 @@ type CentralBankSubProduct
     | Other_Cash_Currency_And_Coin
 
 
+calculate : Dict PartyID CentralBank -> List Cashflow -> List ( Cashflow, RuleCode )
+calculate centralBanks cashflows =
+    let
+        firstPass : List ( Cashflow, RuleCode )
+        firstPass =
+            cashflows
+                |> List.map (\cashflow -> ( cashflow, classify centralBanks cashflow ))
+    in
+    firstPass
+
+
 classify : Dict PartyID CentralBank -> Cashflow -> RuleCode
 classify centralBanks cashflow =
     let
