@@ -143,50 +143,45 @@ totalNetCashOutflowAmount toCounterparty t flowsForDate =
 
         -- Aggregating helpers
         spanDates : (Flow -> Bool) -> List Balance
-        spanDates =
-            \filter ->
-                dates
-                    |> List.map flowsForDate
-                    |> List.map (\flows -> flows |> aggregateDaily filter)
+        spanDates filter =
+            dates
+                |> List.map flowsForDate
+                |> List.map (\flows -> flows |> aggregateDaily filter)
 
         aggregateSpan : (Flow -> Bool) -> Balance
-        aggregateSpan =
-            \filter ->
-                spanDates filter |> List.sum
+        aggregateSpan flowFilter =
+            spanDates flowFilter |> List.sum
 
         aggregateDaily : (Flow -> Bool) -> List Flow -> Balance
-        aggregateDaily =
-            \filter flows ->
-                flows
-                    |> List.filter filter
-                    |> List.map .amount
-                    |> List.sum
+        aggregateDaily flowFilter flows =
+            flows
+                |> List.filter flowFilter
+                |> List.map .amount
+                |> List.sum
 
         -- Non maturity
         nonMaturityOutflowRules : LocalDate -> List (Rules.Rule Flow)
-        nonMaturityOutflowRules =
-            \date ->
-                Rules.findAll
-                    [ "32(a)(1)"
-                    , "32(a)(2)"
-                    , "32(a)(3)"
-                    , "32(a)(4)"
-                    , "32(a)(5)"
-                    , "32(b)"
-                    , "32(c)"
-                    , "32(d)"
-                    , "32(e)"
-                    , "32(f)"
-                    , "32(i)"
-                    ]
-                    (Outflows.outflowRules toCounterparty date)
+        nonMaturityOutflowRules date =
+            Rules.findAll
+                [ "32(a)(1)"
+                , "32(a)(2)"
+                , "32(a)(3)"
+                , "32(a)(4)"
+                , "32(a)(5)"
+                , "32(b)"
+                , "32(c)"
+                , "32(d)"
+                , "32(e)"
+                , "32(f)"
+                , "32(i)"
+                ]
+                (Outflows.outflowRules toCounterparty date)
 
         nonMaturityInflowRules : LocalDate -> List (Rules.Rule Flow)
-        nonMaturityInflowRules =
-            \date ->
-                Rules.findAll
-                    [ "33(b)", "33(g)" ]
-                    (Inflows.inflowRules toCounterparty date)
+        nonMaturityInflowRules date =
+            Rules.findAll
+                [ "33(b)", "33(g)" ]
+                (Inflows.inflowRules toCounterparty date)
 
         nonMaturityOutflowAmount : Balance
         nonMaturityOutflowAmount =
