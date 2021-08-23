@@ -12,6 +12,7 @@ elm-stuff/
 morphir-interface.json
 morphir-implementation.json
 morphir-version.json
+morphir-ir.json
 
 .fake
 .ionide
