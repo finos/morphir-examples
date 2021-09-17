@@ -1,4 +1,4 @@
-module Morphir.Sample.CDM.Reg.MiFIR.Basics exposing (..)
+module Morphir.Sample.Reg.CDM.MiFIR.Basics exposing (..)
 
 
 exists : Maybe a -> Bool

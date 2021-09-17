@@ -1,11 +1,11 @@
-module Morphir.Sample.CDM.Reg.MiFIR.Quantities exposing
+module Morphir.Sample.Reg.CDM.MiFIR.Quantities exposing
     ( NonNegativeQuantity
     , Quantity
     , UnitEnum(..)
     , nonNegativeQuantity
     )
 
-import Morphir.Sample.CDM.Reg.MiFIR.Basics exposing (Amount)
+import Morphir.Sample.Reg.CDM.MiFIR.Basics exposing (Amount)
 
 
 type alias Quantity a =

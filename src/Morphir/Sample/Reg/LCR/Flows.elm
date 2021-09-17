@@ -15,12 +15,14 @@
 -}
 
 
-module Morphir.Sample.LCR.Flows exposing (Amount, BusinessDate, Flow, ReportingEntity)
+module Morphir.Sample.Reg.LCR.Flows exposing (Amount, BusinessDate, Flow, ReportingEntity)
 
 import Morphir.SDK.LocalDate exposing (LocalDate)
-import Morphir.Sample.LCR.Basics exposing (..)
-import Morphir.Sample.LCR.Counterparty exposing (CounterpartyId)
-import Morphir.Sample.LCR.Product exposing (ProductId)
+import Morphir.Sample.Reg.Currency exposing (Currency)
+import Morphir.Sample.Reg.LCR.Basics exposing (..)
+import Morphir.Sample.Reg.LCR.Counterparty exposing (CounterpartyId)
+import Morphir.Sample.Reg.LCR.FedCodeRules exposing (RuleCode)
+import Morphir.Sample.Reg.LCR.Product exposing (ProductId)
 
 
 type alias BusinessDate =
@@ -42,7 +44,7 @@ type alias Flow =
     , collateralClass : AssetCategoryCodes
     , counterpartyId : CounterpartyId
     , currency : Currency
-    , fed5GCode : Fed5GCode
+    , ruleCode : RuleCode
     , insured : InsuranceType
     , isTreasuryControl : Bool
     , isUnencumbered : Bool

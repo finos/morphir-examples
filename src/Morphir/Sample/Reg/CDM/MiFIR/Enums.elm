@@ -1,4 +1,4 @@
-module Morphir.Sample.CDM.Reg.MiFIR.Enums exposing (..)
+module Morphir.Sample.Reg.CDM.MiFIR.Enums exposing (..)
 
 
 type PriceExpressionEnum
