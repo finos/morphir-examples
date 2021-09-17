@@ -17,3 +17,6 @@ morphir-version.json
 .ionide
 
 *.iml
+.metals/
+.settings.json
+
