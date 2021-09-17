@@ -15,7 +15,7 @@
 -}
 
 
-module Morphir.Sample.CDM.Reg.MiFIR.AncillaryRoleEnum exposing (AncillaryRoleEnum(..))
+module Morphir.Sample.Reg.CDM.MiFIR.AncillaryRoleEnum exposing (AncillaryRoleEnum(..))
 
 
 type AncillaryRoleEnum

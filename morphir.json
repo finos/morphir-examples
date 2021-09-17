@@ -2,6 +2,18 @@
   "name": "Morphir/Sample",
   "sourceDirectory": "src",
   "exposedModules": [
-    "BooksAndRecords"
+    "Reg.LCR.FedCodeRules"
+    , "Reg.LCR.Calculations"
+    , "LCR/Basics"
+    , "LCR/Calculations"
+    , "LCR/Counterparty"
+    , "LCR/Flows"
+    , "LCR/Inflows"
+    , "LCR/MaturityBucket"
+    , "LCR/Outflows"
+    , "LCR/Product"
+    , "LCR/Rules"
+    , "Rules/Direct"
+    , "Rules/RuleSet"
   ]
 }

@@ -15,7 +15,7 @@
 -}
 
 
-module Morphir.Sample.CDM.Reg.MiFIR.FloatingRateIndexEnum exposing (..)
+module Morphir.Sample.Reg.CDM.MiFIR.FloatingRateIndexEnum exposing (..)
 
 
 type FloatingRateIndexEnum
