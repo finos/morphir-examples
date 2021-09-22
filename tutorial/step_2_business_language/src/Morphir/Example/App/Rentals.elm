@@ -37,6 +37,12 @@ type Reason
     | ClosedDueToConditions
 
 
+type ExpertiseLevel
+    = Novice
+    | Intermediate
+    | Expert
+
+
 processRequest : Forecast -> CurrentInventory -> ExistingReservations -> PendingReturns -> RequestedQuantity -> AllowPartials -> Result Reason ReservedQuantity
 processRequest forecast inventory reservations returns requestedQuantity allowPartials =
     let
