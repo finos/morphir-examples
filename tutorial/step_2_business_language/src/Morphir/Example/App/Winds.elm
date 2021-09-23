@@ -10,7 +10,7 @@ type WindCategory
     | DangerousWinds
 
 
-categorizeWind : MPH -> WindCategory
+categorizeWind : Int -> WindCategory
 categorizeWind windSpeed =
     if windSpeed < 10 then
         Calm
@@ -23,13 +23,3 @@ categorizeWind windSpeed =
 
     else
         DangerousWinds
-
-
-categorizeWindForForecast : Forecast -> WindCategory
-categorizeWindForForecast forecast =
-    let
-        windCategory : WindCategory
-        windCategory =
-            categorizeWind forecast.windSpeed.max
-    in
-    windCategory

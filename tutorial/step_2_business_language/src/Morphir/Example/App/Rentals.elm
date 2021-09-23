@@ -43,16 +43,6 @@ type ExpertiseLevel
     | Expert
 
 
-processRequest : Forecast -> CurrentInventory -> ExistingReservations -> PendingReturns -> RequestedQuantity -> AllowPartials -> Result Reason ReservedQuantity
-processRequest forecast inventory reservations returns requestedQuantity allowPartials =
-    let
-        windCategory : WindCategory
-        windCategory =
-            categorizeWindForForecast forecast
-    in
-    decide windCategory forecast.shortForcast inventory reservations returns requestedQuantity allowPartials
-
-
 decide : WindCategory -> ForecastDetail -> CurrentInventory -> ExistingReservations -> PendingReturns -> RequestedQuantity -> AllowPartials -> Result Reason ReservedQuantity
 decide windCategory forecastDetail inventory reservations returns requestedQuantity allowPartials =
     let
