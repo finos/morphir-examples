@@ -3,6 +3,7 @@
     "sourceDirectory": "src",
     "exposedModules": [
         "App",
+        "Analytics",
         "Forecast",
         "Rentals",
         "Winds"

@@ -1,11 +1,12 @@
 module Morphir.Example.App.App exposing (..)
 
+import Morphir.Example.App.BusinessTerms exposing (..)
 import Morphir.Example.App.Forecast exposing (..)
 import Morphir.Example.App.Rentals exposing (..)
 import Morphir.Example.App.Winds exposing (..)
 
 
-processRequest : Forecast -> CurrentInventory -> ExistingReservations -> PendingReturns -> RequestedQuantity -> AllowPartials -> Result Reason ReservedQuantity
+processRequest : Forecast -> CurrentInventory -> ExistingReservations -> PendingReturns -> RequestedQuantity -> AllowPartials -> Result Reason ReservationQuantity
 processRequest forecast inventory reservations returns requestedQuantity allowPartials =
     let
         windCategory : WindCategory
