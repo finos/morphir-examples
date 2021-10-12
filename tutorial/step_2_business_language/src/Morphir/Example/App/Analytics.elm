@@ -3,6 +3,8 @@ module Morphir.Example.App.Analytics exposing (..)
 import Morphir.Example.App.BusinessTerms exposing (..)
 
 
+{-| Calculates the probable reservations by applying the historical cancelation ratio to current reservations.
+-}
 probableReservations : ReservationQuantity -> CanceledQuantity -> ReservationQuantity -> ProbableReservations
 probableReservations averageReservationRequests averageCancelations currentReservationCount =
     let
