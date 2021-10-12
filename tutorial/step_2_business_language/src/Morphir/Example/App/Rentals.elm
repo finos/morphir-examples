@@ -1,50 +1,12 @@
 module Morphir.Example.App.Rentals exposing (..)
 
+import Morphir.Example.App.BusinessTerms exposing (..)
 import Morphir.Example.App.Forecast exposing (..)
 import Morphir.Example.App.Winds exposing (..)
 
 
-type alias CurrentInventory =
-    Int
-
-
-type alias ExistingReservations =
-    Int
-
-
-type alias PendingReturns =
-    Int
-
-
-type alias RequestedQuantity =
-    Int
-
-
-type alias ReservedQuantity =
-    Int
-
-
-type alias Availability =
-    Int
-
-
-type alias AllowPartials =
-    Bool
-
-
-type Reason
-    = InsufficientAvailability
-    | ClosedDueToConditions
-
-
-type ExpertiseLevel
-    = Novice
-    | Intermediate
-    | Expert
-
-
-decide : WindCategory -> ForecastDetail -> CurrentInventory -> ExistingReservations -> PendingReturns -> RequestedQuantity -> AllowPartials -> Result Reason ReservedQuantity
-decide windCategory forecastDetail inventory reservations returns requestedQuantity allowPartials =
+decide : WindCategory -> ForecastDetail -> CurrentInventory -> ProbableReservations -> PendingReturns -> RequestedQuantity -> AllowPartials -> Result Reason ReservationQuantity
+decide windCategory forecastDetail inventory probableReservations returns requestedQuantity allowPartials =
     let
         isClosed : Bool
         isClosed =
@@ -60,7 +22,7 @@ decide windCategory forecastDetail inventory reservations returns requestedQuant
 
         availability : Availability
         availability =
-            inventory - reservations + returns
+            inventory - probableReservations + returns
     in
     if isClosed then
         Err ClosedDueToConditions
