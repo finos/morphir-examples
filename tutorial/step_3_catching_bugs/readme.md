@@ -69,4 +69,4 @@ That wraps up our first Morphir model!
 
 
 
-[Home](../../readme.md) | [Prev](../../install.md) | [Next](step_2_business_language/readme.md)
+[Home](../../readme.md) | [Prev](../../install.md) | [Next](step_2_refined_logic/readme.md)

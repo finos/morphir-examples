@@ -1,7 +1,13 @@
 module Morphir.Example.App.Winds exposing (..)
 
-{-| Categorizes Forecast wind speeds into categories that are meaningful to the rental business.
--}
+import Morphir.Example.App.Forecast exposing (..)
+
+
+type WindCategory
+    = Calm
+    | Windy
+    | HighWinds
+    | DangerousWinds
 
 
 categorizeWind : Int -> WindCategory
@@ -17,10 +23,3 @@ categorizeWind windSpeed =
 
     else
         DangerousWinds
-
-
-type WindCategory
-    = Calm
-    | Windy
-    | HighWinds
-    | DangerousWinds

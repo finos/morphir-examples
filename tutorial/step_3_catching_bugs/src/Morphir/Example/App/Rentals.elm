@@ -1,11 +1,17 @@
 module Morphir.Example.App.Rentals exposing (..)
 
+import Morphir.Example.App.Analytics exposing (..)
 import Morphir.Example.App.BusinessTerms exposing (..)
 import Morphir.Example.App.Forecast exposing (..)
 import Morphir.Example.App.Winds exposing (..)
 
 
-decide : WindCategory -> ForecastDetail -> CurrentInventory -> ProbableReservations -> PendingReturns -> RequestedQuantity -> AllowPartials -> Result Reason ReservationQuantity
+type Reason
+    = InsufficientAvailability
+    | ClosedDueToConditions
+
+
+decide : WindCategory -> ForecastDetail -> CurrentInventory -> ProbableReservations -> PendingReturns -> RequestedQuantity -> AllowPartials -> Result Reason ReservedQuantity
 decide windCategory forecastDetail inventory probableReservations returns requestedQuantity allowPartials =
     let
         isClosed : Bool
