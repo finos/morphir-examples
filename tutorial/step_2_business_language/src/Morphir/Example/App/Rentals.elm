@@ -9,16 +9,7 @@ decide : WindCategory -> ForecastDetail -> CurrentInventory -> ProbableReservati
 decide windCategory forecastDetail inventory probableReservations returns requestedQuantity allowPartials =
     let
         isClosed : Bool
-        isClosed =
-            case ( windCategory, forecastDetail ) of
-                ( DangerousWinds, _ ) ->
-                    True
-
-                ( _, Thunderstorms ) ->
-                    True
-
-                _ ->
-                    False
+        isClosed = (windCategory == DangerousWinds) || (forecastDetail == Thunderstorms)
 
         availability : Availability
         availability =
