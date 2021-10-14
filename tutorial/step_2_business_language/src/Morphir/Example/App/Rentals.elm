@@ -27,6 +27,9 @@ decide windCategory forecastDetail inventory probableReservations returns reques
     if isClosed then
         Err ClosedDueToConditions
 
+    else if availability == 0 then
+        Err InsufficientAvailability
+
     else if requestedQuantity <= availability then
         Ok requestedQuantity
 
