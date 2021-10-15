@@ -10,10 +10,10 @@ categorizeWind windSpeed =
         Calm
 
     else if windSpeed < 20 then
-        HighWinds
+        Windy
 
     else if windSpeed < 30 then
-        Windy
+        HighWinds
 
     else
         DangerousWinds
