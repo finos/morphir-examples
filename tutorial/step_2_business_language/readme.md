@@ -7,4 +7,4 @@ An important part of writing business applications is ensuring that the business
 sharing the same language to describe the application.  
 
 
-[Home](../../readme.md) | [Prev](../step_1_first_logic/readme.md) | [Next](step_3_catching_bugs/readme.md)
+[Home](../../readme.md) | [Prev](../step_1_first_logic/readme.md) | [Next](../step_3_catching_bugs/readme.md)
