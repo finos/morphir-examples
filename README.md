@@ -10,6 +10,10 @@ This repo contains various models that represent the kinds of business problems 
 - *[LCR](src/Morphir/Sample/Reg/LCR/README.md)* - An example of modeling regulatory reporting that includes complex calculations.
 - *[Apps](src/Morphir/Sample/Apps/README.md)* - Examples of modeling entire business applications and their interactions.
 
+## How To Get Started
+[Tutorial](https://github.com/finos/morphir-examples/tree/main/tutorial)
+
+
 ### Compile example
 
 morphir-dapr -d
