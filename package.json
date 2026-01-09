@@ -5,9 +5,13 @@
   ],
   "devDependencies": {
     "elm-format": "^0.8.8",
-    "elm-test-rs": "^3.0.1-0"
+    "elm-test-rs": "^3.0.1-0",
+    "husky": "^9.1.7"
   },
   "dependencies": {
     "morphir-elm": "^2.30.4"
+  },
+  "scripts": {
+    "prepare": "husky"
   }
 }
