@@ -1,0 +1,93 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # Triggers on version tags like v1.0.0, v2.3.4, etc.
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., v1.0.0)'
+        required: true
+        type: string
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup mise
+      uses: jdx/mise-action@v3
+      
+    - name: Cache npm dependencies
+      uses: actions/cache@v4
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-npm-
+    
+    - name: Cache Elm dependencies
+      uses: actions/cache@v4
+      with:
+        path: elm-stuff
+        key: ${{ runner.os }}-elm-${{ hashFiles('**/elm.json') }}
+        restore-keys: |
+          ${{ runner.os }}-elm-
+    
+    - name: Run tests
+      run: mise run test
+      
+    - name: Build Morphir IR
+      run: mise run build
+    
+    - name: Determine release tag
+      id: tag
+      run: |
+        TAG=$(mise run determine-release-tag "${{ github.event_name }}" "${{ inputs.version }}" "${{ github.ref }}")
+        echo "tag=$TAG" >> $GITHUB_OUTPUT
+    
+    - name: Fetch all tags
+      run: git fetch --tags --force
+    
+    - name: Generate release notes
+      id: release_notes
+      run: |
+        TAG="${{ steps.tag.outputs.tag }}"
+        REPO_URL="${{ github.server_url }}/${{ github.repository }}"
+        
+        NOTES=$(mise run generate-release-notes "$TAG" "$REPO_URL")
+        
+        {
+          echo 'notes<<EOF'
+          echo "$NOTES"
+          echo 'EOF'
+        } >> $GITHUB_OUTPUT
+    
+    - name: Create Morphir IR archive
+      id: create_archive
+      run: |
+        TAG="${{ steps.tag.outputs.tag }}"
+        ARCHIVE_NAME=$(mise run create-morphir-archive "$TAG")
+        echo "archive_name=$ARCHIVE_NAME" >> $GITHUB_OUTPUT
+    
+    - name: Create or update release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: ${{ steps.tag.outputs.tag }}
+        name: Release ${{ steps.tag.outputs.tag }}
+        body: ${{ steps.release_notes.outputs.notes }}
+        files: |
+          morphir-ir.json
+          morphir-interface.json
+          morphir-implementation.json
+          morphir-version.json
+          ${{ steps.create_archive.outputs.archive_name }}
+        fail_on_unmatched_files: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

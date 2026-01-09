@@ -1,23 +1,24 @@
 {-
-Copyright 2020 Morgan Stanley
+   Copyright 2020 Morgan Stanley
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+       http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
 -}
+
 
 module Morphir.Sample.Apps.Rates.ACL exposing (..)
 
 {-| This module is our anti-corruption layer that translates external states into an
-internal representation. 
+internal representation.
 
 @docs ExternalState, subscribe
 
@@ -25,9 +26,10 @@ internal representation.
 
 import Dict exposing (Dict)
 import Morphir.Sample.Apps.Rates.App exposing (..)
-import Morphir.Sample.Apps.Upstream.Trading.App as TradingApp
-import Morphir.Sample.Apps.Upstream.Product.App as ProductApp
 import Morphir.Sample.Apps.Upstream.Market.App as MarketApp
+import Morphir.Sample.Apps.Upstream.Product.App as ProductApp
+import Morphir.Sample.Apps.Upstream.Trading.App as TradingApp
+
 
 {-| This function describes the mapping from various remote systems to the internal
 representation. The function can have any number of inputs each representing an remote
@@ -66,7 +68,7 @@ map tradingState productState marketState =
                         )
                         Dict.empty
 
-        -- The external representation stores borrow and loans in separate collections. We union them here using 
+        -- The external representation stores borrow and loans in separate collections. We union them here using
         -- side to differentiate later.
         deals =
             Dict.union
@@ -93,7 +95,7 @@ map tradingState productState marketState =
         markets =
             products
                 |> Dict.values
-                |> List.map .marketID            
+                |> List.map .marketID
 
         -- Map benchmark rates for the markets we have products for.
         benchmarkRates =
@@ -106,7 +108,7 @@ map tradingState productState marketState =
                 |> Dict.map
                     (\_ market ->
                         market.benchmarkRate
-                    )    
+                    )
 
         -- Map GC rates for the markets we have products for.
         gcRates =
@@ -119,7 +121,7 @@ map tradingState productState marketState =
                 |> Dict.map
                     (\_ market ->
                         market.gcRate
-                    )    
+                    )
     in
     RemoteState
         benchmarkRates

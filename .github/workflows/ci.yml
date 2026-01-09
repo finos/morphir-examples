@@ -6,7 +6,42 @@ on:
   pull_request:
     branches: [ main, master ]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
+  format-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup mise
+      uses: jdx/mise-action@v3
+      
+    - name: Cache npm dependencies
+      uses: actions/cache@v4
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-npm-
+    
+    - name: Cache Elm dependencies
+      uses: actions/cache@v4
+      with:
+        path: elm-stuff
+        key: ${{ runner.os }}-elm-${{ hashFiles('**/elm.json') }}
+        restore-keys: |
+          ${{ runner.os }}-elm-
+      
+    - name: Check code formatting
+      run: mise run format-check
+
   test:
     runs-on: ubuntu-latest
     permissions:
@@ -18,6 +53,22 @@ jobs:
       
     - name: Setup mise
       uses: jdx/mise-action@v3
+      
+    - name: Cache npm dependencies
+      uses: actions/cache@v4
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-npm-
+    
+    - name: Cache Elm dependencies
+      uses: actions/cache@v4
+      with:
+        path: elm-stuff
+        key: ${{ runner.os }}-elm-${{ hashFiles('**/elm.json') }}
+        restore-keys: |
+          ${{ runner.os }}-elm-
       
     - name: Run tests
       run: mise run test

@@ -1,0 +1,2 @@
+# Pre-commit hook is intentionally empty
+# We use pre-push hook for verification instead

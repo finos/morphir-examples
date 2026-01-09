@@ -1,16 +1,198 @@
 [tools]
 node = "24"
 elm = "0.19.1"
-python = "3.14"
+actionlint = "1.7.10"
+
+# ============================================================================
+# Dependency Installation Tasks
+# ============================================================================
+# These tasks install dependencies and are cached based on their sources.
+# They will only re-run when source files change.
+
+[tasks.npm-install]
+description = "Install npm dependencies"
+sources = ["package.json", "package-lock.json"]
+outputs = ["node_modules/"]
+run = "npm install"
+
+[tasks.elm-install]
+description = "Install Elm dependencies"
+depends = ["npm-install"]
+sources = ["elm.json", "src/**/*.elm"]
+outputs = ["elm-stuff/"]
+run = "elm make --output=/dev/null src/Morphir/Sample/Reg/Currency.elm || true"
+
+[tasks.elm-test-install]
+description = "Install Elm test dependencies"
+depends = ["npm-install"]
+sources = ["elm.json", "src/**/*.elm", "tests/**/*.elm"]
+outputs = ["elm-stuff/"]
+run = "npx elm-test-rs make"
+
+# ============================================================================
+# Restore Tasks
+# ============================================================================
+# Convenience tasks that ensure dependencies are installed.
+# These are useful for CI/CD or when you want to restore dependencies
+# without running a build or test.
+
+[tasks.restore]
+description = "Restore project dependencies"
+depends = ["npm-install"]
+
+[tasks.restore-test-dependencies]
+description = "Restore test dependencies"
+depends = ["elm-test-install"]
+
+[tasks.restore-all]
+description = "Restore all project and test dependencies"
+depends = ["restore", "restore-test-dependencies"]
+
+# ============================================================================
+# Setup Tasks
+# ============================================================================
+# Setup tasks configure the development environment.
+# husky-setup: Installs and configures git hooks using Husky
+# setup: Complete project setup including dependencies and git hooks
+
+[tasks.husky-setup]
+description = "Set up Husky git hooks"
+depends = ["npm-install"]
+sources = [".husky/**", "package.json"]
+run = "npm run prepare"
+
+[tasks.setup]
+description = "Set up the project (install dependencies and configure git hooks)"
+depends = ["restore-all", "husky-setup"]
+
+# ============================================================================
+# Build Tasks
+# ============================================================================
+# Build tasks compile the project. The build process is split into:
+# 1. elm-build: Validates and builds Elm code
+# 2. morphir-build: Generates Morphir IR from Elm sources
+# 3. build: Orchestrates both builds
+
+[tasks.elm-build]
+description = "Build and validate Elm code"
+depends = ["elm-install"]
+sources = ["elm.json", "src/**/*.elm"]
+outputs = ["elm-stuff/"]
+run = "elm make --output=/dev/null src/Morphir/Sample/Reg/Currency.elm || true"
+
+[tasks.morphir-build]
+description = "Build Morphir IR from Elm sources"
+depends = ["npm-install", "elm-install"]
+sources = ["morphir.json", "src/**/*.elm"]
+outputs = ["morphir-ir.json"]
+run = "npx morphir-elm make"
 
 [tasks.build]
 description = "Build Elm and Morphir"
-run = "elm make && npx morphir-elm make"
+depends = ["elm-build", "morphir-build"]
+
+# ============================================================================
+# Format Tasks
+# ============================================================================
+# Format tasks handle code formatting using elm-format.
+# format: Formats all Elm code in src/ and tests/
+# format-check: Validates that code is formatted without making changes
+
+[tasks.format]
+description = "Format all Elm code"
+depends = ["npm-install"]
+run = "npx elm-format --yes src/ tests/"
+
+[tasks.format-check]
+description = "Check if Elm code is formatted"
+depends = ["npm-install"]
+run = "npx elm-format --validate src/ tests/"
+
+# ============================================================================
+# Test Tasks
+# ============================================================================
 
 [tasks.test]
-description = "Run tests with lobo"
-run = "npx lobo --framework=elm-test"
+description = "Run tests with elm-test-rs"
+depends = ["restore-test-dependencies"]
+run = "npx elm-test-rs"
+
+# ============================================================================
+# Lint Tasks
+# ============================================================================
+# Lint tasks check code quality and configuration files.
+# lint-workflows: Lints all GitHub Actions workflow YAML files
+# lint: Runs all linting tasks
+
+[tasks.lint-workflows]
+description = "Lint GitHub Actions workflow files"
+sources = [".github/workflows/**/*.yml", ".github/workflows/**/*.yaml"]
+run = "sh -c 'actionlint $(find .github/workflows -name \"*.yml\" -o -name \"*.yaml\" 2>/dev/null)'"
+
+[tasks.lint]
+description = "Run all linting tasks"
+depends = ["lint-workflows"]
+
+# ============================================================================
+# Verification Tasks
+# ============================================================================
+# Verification tasks run multiple checks to ensure code quality.
+# verify: Runs lint, format-check, and test to verify code quality
+
+[tasks.verify]
+description = "Verify code quality (lint, format-check, and test)"
+depends = ["lint", "format-check", "test"]
+
+# ============================================================================
+# Release Tasks
+# ============================================================================
+# Release tasks help with creating and managing releases.
+
+[tasks.generate-release-notes]
+description = "Generate release notes for a given version tag. Usage: mise run generate-release-notes <version> [repository-url]"
+depends = ["npm-install"]
+sources = ["scripts/generate-release-notes.ts", "package.json"]
+run = "npx tsx scripts/generate-release-notes.ts"
+
+[tasks.determine-release-tag]
+description = "Determine release tag from event type. Usage: mise run determine-release-tag <event-name> [version-input] [github-ref]"
+depends = ["npm-install"]
+sources = ["scripts/determine-release-tag.ts", "package.json"]
+run = "npx tsx scripts/determine-release-tag.ts"
+
+[tasks.create-morphir-archive]
+description = "Create a gzipped tar archive of Morphir IR artifacts. Usage: mise run create-morphir-archive <version>"
+depends = ["npm-install"]
+sources = ["scripts/create-morphir-archive.ts", "package.json"]
+run = "npx tsx scripts/create-morphir-archive.ts"
+
+# ============================================================================
+# Other Tasks
+# ============================================================================
 
 [tasks.train-build-release]
 description = "Run train-build-release"
+depends = ["npm-install"]
 run = "npx train-build-release"
+
+# ============================================================================
+# Clean Tasks
+# ============================================================================
+# Clean tasks remove build outputs. Use these to start fresh or free up disk space.
+# The main 'clean' task runs all clean subtasks.
+
+[tasks.clean-npm]
+description = "Clean npm build outputs"
+run = "rm -rf node_modules/"
+
+[tasks.clean-elm]
+description = "Clean Elm build outputs"
+run = "rm -rf elm-stuff/"
+
+[tasks.clean-morphir]
+description = "Clean Morphir build outputs"
+run = "rm -f morphir-ir.json morphir-interface.json morphir-implementation.json morphir-version.json"
+
+[tasks.clean]
+description = "Clean all build outputs"
+depends = ["clean-npm", "clean-elm", "clean-morphir"]
