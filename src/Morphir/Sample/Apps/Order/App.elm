@@ -1,38 +1,43 @@
 {-
-Copyright 2020 Morgan Stanley
+   Copyright 2020 Morgan Stanley
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+       http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
 -}
-module Morphir.Sample.Apps.Order.App exposing 
-    ( App
-    , API
+
+
+module Morphir.Sample.Apps.Order.App exposing
+    ( API
+    , App
     , Event
-    , StateFault
     , LocalState
     , RemoteState
+    , StateFault
     )
 
-
 import Dict exposing (Dict)
-import Morphir.SDK.StatefulApp exposing (StatefulApp, statefulApp, cmdNone)
-import Morphir.Sample.Apps.Shared.Product as Product
+import Morphir.SDK.StatefulApp exposing (StatefulApp, cmdNone, statefulApp)
 import Morphir.Sample.Apps.BooksAndRecords.Deal as Deal
 import Morphir.Sample.Apps.Order.Order as Order
 import Morphir.Sample.Apps.Shared.Price exposing (..)
+import Morphir.Sample.Apps.Shared.Product as Product
 import Morphir.Sample.Apps.Shared.Quantity exposing (..)
 
+
+
 -- Types
-type alias App = 
+
+
+type alias App =
     StatefulApp API RemoteState LocalState Event
 
 
@@ -57,7 +62,7 @@ type alias LocalState =
     }
 
 
-type Event 
+type Event
     = BuyProcessed Order.BuyRequest Order.BuyResponse
     | SellProcessed Order.SellRequest Order.SellResponse
 
@@ -68,22 +73,25 @@ type StateFault
     | MissingPrice Order.ID
 
 
-type alias BuyRecord = 
+type alias BuyRecord =
     { request : Order.BuyRequest
     , response : Order.BuyResponse
     }
 
 
-type alias SellRecord = 
+type alias SellRecord =
     { request : Order.SellRequest
     , response : Order.SellResponse
     }
 
 
+
 -- Functions
+
+
 app : App
 app =
-    statefulApp 
+    statefulApp
         { api = api
         , init = init
         , update = update
@@ -93,14 +101,14 @@ app =
 
 api : RemoteState -> LocalState -> API
 api remote local =
-    { buy = (apiBuy remote local)
-    , sell = (apiSell remote local)
+    { buy = apiBuy remote local
+    , sell = apiSell remote local
     }
 
 
 init : RemoteState -> ( LocalState, Cmd Event )
-init _ = 
-    cmdNone 
+init _ =
+    cmdNone
         { buys = Dict.empty
         , sells = Dict.empty
         }
@@ -112,75 +120,92 @@ update remote event local =
         -- Update our local state with the new buy request/response
         BuyProcessed request response ->
             let
-                newRecord = BuyRecord request response
-                ordersUpdated = Dict.insert request.id newRecord local.buys
+                newRecord =
+                    BuyRecord request response
+
+                ordersUpdated =
+                    Dict.insert request.id newRecord local.buys
+
                 dealCommand =
                     case response of
                         -- If we accepted the buy, send it over to booking
-                        Order.BuyAccepted orderID productID price quantity -> 
+                        Order.BuyAccepted orderID productID price quantity ->
                             remote.bookBuy orderID productID price quantity
+
                         _ ->
                             Cmd.none
             in
-            ({ local | buys = ordersUpdated }, dealCommand)
+            ( { local | buys = ordersUpdated }, dealCommand )
 
         -- Update our local state with the new sell request/response
         SellProcessed request response ->
             let
-                newRecord = SellRecord request response
-                ordersUpdated = Dict.insert request.id newRecord local.sells
+                newRecord =
+                    SellRecord request response
+
+                ordersUpdated =
+                    Dict.insert request.id newRecord local.sells
+
                 dealCommand =
                     case response of
-                        Order.SellAccepted orderID price -> 
+                        Order.SellAccepted orderID price ->
                             -- If the sell was accepted, let booking know to close the deal
                             remote.bookSell orderID price
             in
-            ({ local | sells = ordersUpdated }, dealCommand)
+            ( { local | sells = ordersUpdated }, dealCommand )
 
 
 subscriptions remote local =
     Sub.none
 
 
+
 -- Extras
+
+
 apiBuy : RemoteState -> LocalState -> Order.BuyRequest -> Result StateFault Event
 apiBuy remote local request =
-        let
-            currentMarketPrice = 
-                marketPrice remote request.product
+    let
+        currentMarketPrice =
+            marketPrice remote request.product
 
-            currentAvailility = 
-                let 
-                    sodp = 
-                        (startOfDayPosition remote request.product)
-                    buyResponses =
-                        local.buys |> Dict.values |> List.map .response
-                in 
-                Order.availability sodp buyResponses
-                
-            process = \price ->
+        currentAvailility =
+            let
+                sodp =
+                    startOfDayPosition remote request.product
+
+                buyResponses =
+                    local.buys |> Dict.values |> List.map .response
+            in
+            Order.availability sodp buyResponses
+
+        process =
+            \price ->
                 Order.processBuy request price currentAvailility
-        in
-        currentMarketPrice 
-            |> Maybe.map process
-            |> Maybe.map (\result -> Ok (BuyProcessed request result))
-            |> Maybe.withDefault (Err (MissingPrice request.id))
+    in
+    currentMarketPrice
+        |> Maybe.map process
+        |> Maybe.map (\result -> Ok (BuyProcessed request result))
+        |> Maybe.withDefault (Err (MissingPrice request.id))
 
 
 apiSell : RemoteState -> LocalState -> Order.SellRequest -> Result StateFault Event
 apiSell remote local request =
     let
-        maybeDeal = remote.getDeal request.id
+        maybeDeal =
+            remote.getDeal request.id
     in
-        case maybeDeal of
-            Just deal -> 
-                case (marketPrice remote deal.product) of 
-                    Just price -> 
-                        Ok (SellProcessed request (Order.processSell request price))
-                    Nothing -> 
-                        Err (MissingPrice request.id)
-            Nothing ->
-                Err (DealNotFound request.id)
+    case maybeDeal of
+        Just deal ->
+            case marketPrice remote deal.product of
+                Just price ->
+                    Ok (SellProcessed request (Order.processSell request price))
+
+                Nothing ->
+                    Err (MissingPrice request.id)
+
+        Nothing ->
+            Err (DealNotFound request.id)
 
 
 marketPrice : RemoteState -> Product.ID -> Maybe Price
@@ -191,4 +216,3 @@ marketPrice remote productId =
 startOfDayPosition : RemoteState -> Product.ID -> Quantity
 startOfDayPosition remote productId =
     remote.getStartOfDayPosition productId |> Maybe.withDefault 0
-

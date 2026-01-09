@@ -1,21 +1,21 @@
 {-
-Copyright 2020 Morgan Stanley
+   Copyright 2020 Morgan Stanley
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+       http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
 -}
 
-module Morphir.Sample.Apps.Approvals.Inventory.App exposing (..)
 
+module Morphir.Sample.Apps.Approvals.Inventory.App exposing (..)
 
 import Dict exposing (Dict)
 import Morphir.SDK.App exposing (StatefulApp, statefulApp)
@@ -23,21 +23,22 @@ import Morphir.Sample.Apps.Shared.Product as Product
 
 
 {-| This is a type that describes the application to the external world.
-It can be referenced in other applications' anti-corruption layers but 
+It can be referenced in other applications' anti-corruption layers but
 should not be directly referenced from other applications. Check out
 how it's referenced from [ACL.elm](../LocateList/ACL.elm).
 
 The declaration makes it clear that this is a stateful app and refers
 to other types that desribe the API, events, remote and local state of
 the app.
+
 -}
-type alias App = 
+type alias App =
     StatefulApp API RemoteState LocalState Event
 
 
 {-| Type that describes the API of the application. Each field is a function
 that returns a result with a failure or an event. This type is used in other
-applications' ACLs to send commands to the application. The events generated 
+applications' ACLs to send commands to the application. The events generated
 will be sent to the update method by the runtime.
 -}
 type alias API =
@@ -87,17 +88,16 @@ app =
         }
 
 
-{-| Function that returns an implementation of the API based on the remote and 
+{-| Function that returns an implementation of the API based on the remote and
 the local state. Invocations of the API don't directly update the state instead
 they generate events which can update the state through the update function.
 -}
 api : RemoteState -> LocalState -> API
 api remote local =
-    { receiveAvailability = 
+    { receiveAvailability =
         \productID qty ->
             Ok (AvailabilityReceived productID qty)
-
-    , requestApproval = 
+    , requestApproval =
         \productID requestedQty ->
             case local.availability |> Dict.get productID of
                 Nothing ->
@@ -106,6 +106,7 @@ api remote local =
                 Just availableQty ->
                     if availableQty >= requestedQty then
                         Ok (ApprovalGranted productID requestedQty)
+
                     else
                         Ok (ApprovalDenied productID)
     }
@@ -114,12 +115,12 @@ api remote local =
 {-| Same as The Elm Architecture with an additional remote state input.
 -}
 init : RemoteState -> ( LocalState, Cmd Event )
-init _ = 
+init _ =
     ( { availability = Dict.empty
       , requestStates = Dict.empty
       }
     , Cmd.none
-    )  
+    )
 
 
 {-| Same as The Elm Architecture with an additional remote state input.
@@ -130,40 +131,39 @@ update remote event state =
         AvailabilityReceived productID qty ->
             ( { state
                 | availability =
-                    state.availability 
+                    state.availability
                         |> Dict.update productID
                             (\maybeAvail ->
                                 let
                                     currentQty =
-                                        maybeAvail 
+                                        maybeAvail
                                             |> Maybe.withDefault 0
                                 in
                                 Just (currentQty + qty)
-                            ) 
+                            )
               }
-            , Cmd.none 
+            , Cmd.none
             )
 
         ApprovalGranted productID qty ->
             ( { state
                 | availability =
-                    state.availability 
+                    state.availability
                         |> Dict.update productID
                             (\maybeAvail ->
                                 let
                                     currentQty =
-                                        maybeAvail 
+                                        maybeAvail
                                             |> Maybe.withDefault 0
                                 in
                                 Just (currentQty - qty)
-                            ) 
+                            )
               }
-            , Cmd.none 
+            , Cmd.none
             )
 
         ApprovalDenied productID ->
             ( state, Cmd.none )
-
 
         ApprovalPending productID qty ->
             ( state, Cmd.none )
@@ -175,6 +175,7 @@ subscriptions remote local =
     Sub.none
 
 
+
 -- Extra types used in the API and state
 
 
@@ -182,13 +183,11 @@ type InvalidRequest
     = InvalidQuantity Int
 
 
-type alias RequestID = 
+type alias RequestID =
     ( String, Product.ID )
 
 
 type RequestState
     = Pending
     | Approved
-    | Denied        
-
-
+    | Denied
