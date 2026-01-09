@@ -65,14 +65,14 @@ centralBanks =
 
 netUsdTest : Test
 netUsdTest =
-    describe "Net USD tests"
+    describe "FedCodeRules - Net USD tests"
         [ test "basic net USD" <| \_ -> netCashUSD 100 |> Expect.equal 100
         ]
 
 
 centralBankToSubProductTest : Test
 centralBankToSubProductTest =
-    describe "CentralBank to SubPrduct tests"
+    describe "FedCodeRules - CentralBank to SubPrduct tests"
         [ test "basic net FRB" <| \_ -> centralBankToSubProduct Federal_Reserve_Bank |> Expect.equal FRB
         , test "basic net SNB" <| \_ -> centralBankToSubProduct Swiss_National_Bank |> Expect.equal SNB
         , test "basic net BOE" <| \_ -> centralBankToSubProduct Bank_of_England |> Expect.equal BOE
@@ -86,11 +86,11 @@ centralBankToSubProductTest =
 
 isOnshoreTest : Test
 isOnshoreTest =
-    describe "Onshore vs Offshore tests"
-        [ test "All US" <| \_ -> isOnshore USA USD USA |> Expect.true "Expected True"
-        , test "Cashflow EUR vs all USD" <| \_ -> isOnshore USA EUR USA |> Expect.false "Expected False"
-        , test "LegalEntity AUS vs all USD" <| \_ -> isOnshore AUS USD USA |> Expect.false "Expected False"
-        , test "Counterparty AUS vs all USD" <| \_ -> isOnshore USA USD AUS |> Expect.false "Expected False"
+    describe "FedCodeRules - Onshore vs Offshore tests"
+        [ test "All US" <| \_ -> isOnshore USA USD USA |> Expect.equal True
+        , test "Cashflow EUR vs all USD" <| \_ -> isOnshore USA EUR USA |> Expect.equal False
+        , test "LegalEntity AUS vs all USD" <| \_ -> isOnshore AUS USD USA |> Expect.equal False
+        , test "Counterparty AUS vs all USD" <| \_ -> isOnshore USA USD AUS |> Expect.equal False
         ]
 
 
@@ -159,7 +159,7 @@ rule_I_UTest =
 
 classifyTest : Test
 classifyTest =
-    describe "6G classification test"
+    describe "FedCodeRules - 6G classification test"
         [ test "I.A.3.1" <| \_ -> classify centralBanks { cashflow | tenQLevel4 = "            ", partyId = "fed" } |> Expect.equal [ "I", "A", "3", "1" ]
         , test "I.A.3.8" <| \_ -> classify centralBanks { cashflow | tenQLevel4 = "            ", partyId = "lux" } |> Expect.equal [ "I", "A", "3", "8" ]
         , test "I.A.4.1" <| \_ -> classify centralBanks { cashflow | tenQLevel4 = segregatedCash, partyId = "fed" } |> Expect.equal [ "I", "A", "4", "1" ]

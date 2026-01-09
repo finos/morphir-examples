@@ -67,14 +67,14 @@ centralBanks =
 
 netUsdTest : Test
 netUsdTest =
-    describe "Net USD tests"
+    describe "FedCode - Net USD tests"
         [ test "basic net USD" <| \_ -> netCashUSD cashflow |> Expect.equal 100
         ]
 
 
 centralBankToSubProductTest : Test
 centralBankToSubProductTest =
-    describe "CentralBank to SubPrduct tests"
+    describe "FedCode - CentralBank to SubPrduct tests"
         [ test "basic net FRB" <| \_ -> centralBankToSubProduct Federal_Reserve_Bank |> Expect.equal FRB
         , test "basic net SNB" <| \_ -> centralBankToSubProduct Swiss_National_Bank |> Expect.equal SNB
         , test "basic net BOE" <| \_ -> centralBankToSubProduct Bank_of_England |> Expect.equal BOE
@@ -92,11 +92,11 @@ isOnshoreTest =
         c =
             cashflow
     in
-    describe "Onshore vs Offshore tests"
-        [ test "All US" <| \_ -> isOnshore c |> Expect.true "Expected True"
-        , test "Cashflow EUR vs all USD" <| \_ -> isOnshore { c | currency = EUR } |> Expect.false "Expected False"
-        , test "LegalEntity AUS vs all USD" <| \_ -> isOnshore { c | legalEntity = LegalEntity "LE1" (Just AUS) } |> Expect.false "Expected False"
-        , test "Counterparty AUS vs all USD" <| \_ -> isOnshore { c | counterparty = Counterparty AUS "" "" } |> Expect.false "Expected False"
+    describe "FedCode - Onshore vs Offshore tests"
+        [ test "All US" <| \_ -> isOnshore c |> Expect.equal True
+        , test "Cashflow EUR vs all USD" <| \_ -> isOnshore { c | currency = EUR } |> Expect.equal False
+        , test "LegalEntity AUS vs all USD" <| \_ -> isOnshore { c | legalEntity = LegalEntity "LE1" (Just AUS) } |> Expect.equal False
+        , test "Counterparty AUS vs all USD" <| \_ -> isOnshore { c | counterparty = Counterparty AUS "" "" } |> Expect.equal False
         ]
 
 
@@ -106,7 +106,7 @@ classifyTest =
         c =
             cashflow
     in
-    describe "6G classification test"
+    describe "FedCode - 6G classification test"
         [ test "I.A.4.1" <| \_ -> classify { c | partyId = "fed" } centralBanks |> Expect.equal IA41
         , test "I.A.4.2" <| \_ -> classify { c | partyId = "swiss" } centralBanks |> Expect.equal IA42
         ]

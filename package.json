@@ -5,8 +5,7 @@
   ],
   "devDependencies": {
     "elm-format": "^0.8.8",
-    "elm-test-rs": "^3.0.1-0",
-    "lobo": "^1.0.0"
+    "elm-test-rs": "^3.0.1-0"
   },
   "dependencies": {
     "morphir-elm": "^2.30.4"

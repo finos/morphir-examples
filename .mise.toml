@@ -3,14 +3,23 @@ node = "24"
 elm = "0.19.1"
 python = "3.14"
 
+[tasks.npm-install]
+description = "Install npm dependencies"
+sources = ["package.json", "package-lock.json"]
+outputs = ["node_modules/"]
+run = "npm install"
+
 [tasks.build]
 description = "Build Elm and Morphir"
+depends = ["npm-install"]
 run = "elm make && npx morphir-elm make"
 
 [tasks.test]
-description = "Run tests with lobo"
-run = "npx lobo --framework=elm-test"
+description = "Run tests with elm-test-rs"
+depends = ["npm-install"]
+run = "npx elm-test-rs"
 
 [tasks.train-build-release]
 description = "Run train-build-release"
+depends = ["npm-install"]
 run = "npx train-build-release"
