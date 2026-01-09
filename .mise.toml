@@ -9,6 +9,25 @@ sources = ["package.json", "package-lock.json"]
 outputs = ["node_modules/"]
 run = "npm install"
 
+[tasks.elm-test-install]
+description = "Install Elm test dependencies"
+depends = ["npm-install"]
+sources = ["elm.json", "src/**/*.elm", "tests/**/*.elm"]
+outputs = ["elm-stuff/"]
+run = "npx elm-test-rs make"
+
+[tasks.restore]
+description = "Restore project dependencies"
+depends = ["npm-install"]
+
+[tasks.restore-test-dependencies]
+description = "Restore test dependencies"
+depends = ["elm-test-install"]
+
+[tasks.restore-all]
+description = "Restore all project and test dependencies"
+depends = ["restore", "restore-test-dependencies"]
+
 [tasks.build]
 description = "Build Elm and Morphir"
 depends = ["npm-install"]
@@ -16,7 +35,7 @@ run = "elm make && npx morphir-elm make"
 
 [tasks.test]
 description = "Run tests with elm-test-rs"
-depends = ["npm-install"]
+depends = ["restore-test-dependencies"]
 run = "npx elm-test-rs"
 
 [tasks.train-build-release]
