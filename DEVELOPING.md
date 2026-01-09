@@ -200,6 +200,51 @@ Clean Morphir build outputs (IR JSON files).
 mise run clean-morphir
 ```
 
+### Release Tasks
+
+#### `trigger-release`
+Trigger a release by creating and pushing a version tag. This will automatically trigger the GitHub Actions release workflow.
+
+```bash
+mise run trigger-release v1.0.0
+```
+
+The version must follow semantic versioning format (e.g., `v1.0.0`, `v2.3.4`, `v1.0.0-beta.1`).
+
+**Requirements:**
+- No uncommitted changes
+- Tag must not already exist
+- Must be run from a git repository
+
+**What it does:**
+- Validates the version format
+- Checks for uncommitted changes
+- Verifies the tag doesn't already exist
+- Fetches latest tags from remote
+- Creates the tag locally
+- Pushes the tag to trigger the release workflow
+
+#### `generate-release-notes`
+Generate release notes for a given version tag by comparing it to the previous tag.
+
+```bash
+mise run generate-release-notes v1.0.0 [repository-url]
+```
+
+#### `determine-release-tag`
+Determine release tag from event type (used internally by the release workflow).
+
+```bash
+mise run determine-release-tag <event-name> [version-input] [github-ref]
+```
+
+#### `create-morphir-archive`
+Create a gzipped tar archive of Morphir IR artifacts.
+
+```bash
+mise run create-morphir-archive v1.0.0
+```
+
 ### Other Tasks
 
 #### `train-build-release`
@@ -263,6 +308,37 @@ Then restore dependencies:
 ```bash
 mise run restore-all
 ```
+
+### Creating a Release
+
+To create a new release:
+
+1. **Ensure everything is committed and pushed:**
+   ```bash
+   git status  # Should show no uncommitted changes
+   ```
+
+2. **Run verification to ensure code quality:**
+   ```bash
+   mise run verify
+   ```
+
+3. **Trigger the release:**
+   ```bash
+   mise run trigger-release v1.0.0
+   ```
+
+   Replace `v1.0.0` with your desired version number (must follow semantic versioning).
+
+4. **Monitor the release workflow:**
+   The script will provide a link to monitor the GitHub Actions workflow. The workflow will:
+   - Run the test suite
+   - Build Morphir IR
+   - Generate release notes
+   - Create a Morphir IR archive
+   - Create a GitHub release with all artifacts attached
+
+**Note:** The release workflow is triggered automatically when you push a tag matching the pattern `v*.*.*`. You can also trigger it manually from the GitHub Actions UI by using the "Run workflow" button and providing a version.
 
 ## Git Hooks
 
