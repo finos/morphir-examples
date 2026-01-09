@@ -1,5 +1,5 @@
 [tools]
-node = "20"
+node = "24"
 elm = "0.19.1"
 actionlint = "1.7.10"
 
