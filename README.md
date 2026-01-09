@@ -13,6 +13,9 @@ This repo contains various models that represent the kinds of business problems 
 ## How To Get Started
 [Tutorial](https://github.com/finos/morphir-examples/tree/main/tutorial)
 
+## Development
+
+For information on setting up your development environment and running tasks, see [DEVELOPING.md](DEVELOPING.md).
 
 ### Compile example
 

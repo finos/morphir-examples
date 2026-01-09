@@ -6,7 +6,9 @@
   "devDependencies": {
     "elm-format": "^0.8.8",
     "elm-test-rs": "^3.0.1-0",
-    "husky": "^9.1.7"
+    "husky": "^9.1.7",
+    "typescript": "^5.7.2",
+    "tsx": "^4.19.2"
   },
   "dependencies": {
     "morphir-elm": "^2.30.4"

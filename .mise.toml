@@ -1,7 +1,6 @@
 [tools]
 node = "24"
 elm = "0.19.1"
-python = "3.14"
 actionlint = "1.7.10"
 
 # ============================================================================
@@ -143,6 +142,29 @@ depends = ["lint-workflows"]
 [tasks.verify]
 description = "Verify code quality (lint, format-check, and test)"
 depends = ["lint", "format-check", "test"]
+
+# ============================================================================
+# Release Tasks
+# ============================================================================
+# Release tasks help with creating and managing releases.
+
+[tasks.generate-release-notes]
+description = "Generate release notes for a given version tag. Usage: mise run generate-release-notes <version> [repository-url]"
+depends = ["npm-install"]
+sources = ["scripts/generate-release-notes.ts", "package.json"]
+run = "npx tsx scripts/generate-release-notes.ts"
+
+[tasks.determine-release-tag]
+description = "Determine release tag from event type. Usage: mise run determine-release-tag <event-name> [version-input] [github-ref]"
+depends = ["npm-install"]
+sources = ["scripts/determine-release-tag.ts", "package.json"]
+run = "npx tsx scripts/determine-release-tag.ts"
+
+[tasks.create-morphir-archive]
+description = "Create a gzipped tar archive of Morphir IR artifacts. Usage: mise run create-morphir-archive <version>"
+depends = ["npm-install"]
+sources = ["scripts/create-morphir-archive.ts", "package.json"]
+run = "npx tsx scripts/create-morphir-archive.ts"
 
 # ============================================================================
 # Other Tasks
