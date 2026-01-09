@@ -1,3 +1,16 @@
 [tools]
 node = "24"
 elm = "0.19.1"
+python = "3.14"
+
+[tasks.build]
+description = "Build Elm and Morphir"
+run = "elm make && npx morphir-elm make"
+
+[tasks.test]
+description = "Run tests with lobo"
+run = "npx lobo --framework=elm-test"
+
+[tasks.train-build-release]
+description = "Run train-build-release"
+run = "npx train-build-release"
