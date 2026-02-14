@@ -1,7 +1,7 @@
 [tools]
 node = "20"
 elm = "0.19.1"
-actionlint = "1.7.10"
+actionlint = "1.7.11"
 
 # ============================================================================
 # Dependency Installation Tasks
