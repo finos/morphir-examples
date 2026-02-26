@@ -11,7 +11,7 @@
     "tsx": "^4.19.2"
   },
   "dependencies": {
-    "morphir-elm": "^2.30.4"
+    "morphir-elm": "^2.100.0"
   },
   "scripts": {
     "prepare": "husky"
