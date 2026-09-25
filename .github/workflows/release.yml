@@ -50,7 +50,7 @@ jobs:
       id: tag
       run: |
         TAG=$(mise run determine-release-tag "${{ github.event_name }}" "${{ inputs.version }}" "${{ github.ref }}")
-        echo "tag=$TAG" >> $GITHUB_OUTPUT
+        echo "tag=$TAG" >> "$GITHUB_OUTPUT"
     
     - name: Fetch all tags
       run: git fetch --tags --force
@@ -67,14 +67,14 @@ jobs:
           echo 'notes<<EOF'
           echo "$NOTES"
           echo 'EOF'
-        } >> $GITHUB_OUTPUT
+        } >> "$GITHUB_OUTPUT"
     
     - name: Create Morphir IR archive
       id: create_archive
       run: |
         TAG="${{ steps.tag.outputs.tag }}"
         ARCHIVE_NAME=$(mise run create-morphir-archive "$TAG")
-        echo "archive_name=$ARCHIVE_NAME" >> $GITHUB_OUTPUT
+        echo "archive_name=$ARCHIVE_NAME" >> "$GITHUB_OUTPUT"
     
     - name: Create or update release
       uses: softprops/action-gh-release@v3
