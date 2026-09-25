@@ -8,7 +8,7 @@ This project uses [mise](https://mise.jdx.dev/) (formerly rtx) to manage tool ve
 
 The project requires:
 - Node.js 24
-- Elm 0.19.1
+- Elm 0.19.2
 - actionlint 1.7.10
 
 All tools are automatically installed by mise when you run tasks.
