@@ -26,7 +26,7 @@ This project uses several toolchains for development:
   - Smart rebuilds based on source file changes
 
 ### Language & Runtime
-- **Elm 0.19.1**: Functional programming language used to write business logic models
+- **Elm 0.19.2**: Functional programming language used to write business logic models
 - **Node.js 24**: JavaScript runtime for running build tools and tests
 
 ### Build Tools
