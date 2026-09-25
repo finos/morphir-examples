@@ -3,16 +3,45 @@
   "extends": ["config:recommended"],
   "packageRules": [
     {
-      "description": "Group non-major npm dependencies",
-      "matchManagers": ["npm"],
-      "matchUpdateTypes": ["minor", "patch"],
-      "groupName": "npm dependencies (non-major)"
+      "description": "Group all GitHub Actions updates",
+      "matchManagers": ["github-actions"],
+      "groupName": "github actions dependencies"
     },
     {
-      "description": "Group non-major Elm dependencies",
+      "description": "Group major npm dependencies",
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["major"],
+      "groupName": "npm dependencies (major)"
+    },
+    {
+      "description": "Group minor npm dependencies",
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["minor"],
+      "groupName": "npm dependencies (minor)"
+    },
+    {
+      "description": "Group patch npm dependencies",
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["patch"],
+      "groupName": "npm dependencies (patch)"
+    },
+    {
+      "description": "Group major Elm dependencies",
       "matchManagers": ["elm"],
-      "matchUpdateTypes": ["minor", "patch"],
-      "groupName": "elm dependencies (non-major)"
+      "matchUpdateTypes": ["major"],
+      "groupName": "elm dependencies (major)"
+    },
+    {
+      "description": "Group minor Elm dependencies",
+      "matchManagers": ["elm"],
+      "matchUpdateTypes": ["minor"],
+      "groupName": "elm dependencies (minor)"
+    },
+    {
+      "description": "Group patch Elm dependencies",
+      "matchManagers": ["elm"],
+      "matchUpdateTypes": ["patch"],
+      "groupName": "elm dependencies (patch)"
     }
   ]
 }
