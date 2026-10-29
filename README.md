@@ -20,3 +20,9 @@ For information on setting up your development environment and running tasks, se
 ### Compile example
 
 morphir-dapr -d
+
+## OpenSpec change proposals
+
+This repository uses the shared `html-design` OpenSpec workflow. New proposals
+produce capability specs, a standalone `design.html`, and implementation tasks.
+See [the OpenSpec guide](docs/openspec.md) for setup, verification and updates.

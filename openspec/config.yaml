@@ -1,0 +1,10 @@
+# Copyright 2026 FINOS
+# SPDX-License-Identifier: Apache-2.0
+
+schema: html-design
+githubCopilot:
+  cloudAgent: false
+context: |
+  Morphir Examples contains Elm business-domain models and their tests.
+  Use the existing mise tasks for Elm formatting, workflow linting and tests.
+  Follow AGENTS.md, DEVELOPING.md and CONTRIBUTING.md; link the GitHub issue, preserve domain behavior and obtain the required review.

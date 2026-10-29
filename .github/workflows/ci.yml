@@ -39,6 +39,16 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-elm-
       
+    - name: Complete the pinned MoonBit SDK and package registry
+      run: |
+        set -euo pipefail
+        curl -fsSL https://cli.moonbitlang.com/install/unix.sh | \
+          MOON_HOME="$(mise where http:moonbit)" bash -s -- "$(mise current http:moonbit)"
+        mise exec -- moon update
+
+    - name: Verify shared OpenSpec workflow
+      run: mise run openspec:verify
+
     - name: Check code formatting
       run: mise run format-check
 

@@ -1,4 +1,5 @@
 [tools]
+"npm:@fission-ai/openspec" = "1.14.3"
 node = "24"
 elm = "0.19.2"
 actionlint = "1.7.12"
@@ -141,7 +142,7 @@ depends = ["lint-workflows"]
 
 [tasks.verify]
 description = "Verify code quality (lint, format-check, and test)"
-depends = ["lint", "format-check", "test"]
+depends = ["lint", "format-check", "test", "openspec:verify"]
 
 # ============================================================================
 # Release Tasks
@@ -202,3 +203,34 @@ run = "rm -f morphir-ir.json morphir-interface.json morphir-implementation.json 
 [tasks.clean]
 description = "Clean all build outputs"
 depends = ["clean-npm", "clean-elm", "clean-morphir"]
+
+[tools."http:moonbit"]
+version = "0.10.15+943464bfa"
+bin_path = "bin"
+
+[tools."http:moonbit".platforms]
+linux-x64 = { url = "https://cli.moonbitlang.com/binaries/0.10.15%2B943464bfa/moonbit-linux-x86_64.tar.gz" }
+linux-arm64 = { url = "https://cli.moonbitlang.com/binaries/0.10.15%2B943464bfa/moonbit-linux-aarch64.tar.gz" }
+macos-arm64 = { url = "https://cli.moonbitlang.com/binaries/0.10.15%2B943464bfa/moonbit-darwin-aarch64.tar.gz" }
+macos-x64 = { url = "https://cli.moonbitlang.com/binaries/0.10.15%2B943464bfa/moonbit-darwin-x86_64.tar.gz" }
+windows-x64 = { url = "https://cli.moonbitlang.com/binaries/0.10.15%2B943464bfa/moonbit-windows-x86_64.zip", format = "zip" }
+
+[tasks."openspec:check"]
+description = "Check the shared OpenSpec workflow"
+run = "mise exec -- moon run -q --target wasm scripts/openspec-ext.mbtx -- check"
+
+[tasks."openspec:setup"]
+description = "Setup the shared OpenSpec workflow"
+run = "mise exec -- moon run -q --target wasm scripts/openspec-ext.mbtx -- setup"
+
+[tasks."openspec:validate"]
+description = "Validate the shared OpenSpec workflow"
+run = ["mise exec -- openspec schema validate html-design", "mise exec -- openspec validate --all --strict"]
+
+[tasks."openspec:test"]
+description = "Test the shared OpenSpec workflow"
+run = "mise exec -- moon test --deny-warn --target wasm scripts/openspec-ext.mbtx"
+
+[tasks."openspec:verify"]
+description = "Verify the shared OpenSpec workflow"
+run = ["mise run openspec:check", "mise run openspec:validate", "mise run openspec:test"]
