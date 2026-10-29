@@ -61,7 +61,8 @@ Existing skills outside the generated OpenSpec set are preserved.
 ## Update the shared bundle
 
 `openspec/extensions.lock.json` records openspec-ext 0.1.0 and SHA-256 hashes for
-nine managed files. Keep the schema, templates, notices, checker and its feature
+nine managed files. Git attributes preserve LF line endings so Windows
+checkouts keep those hashes. Keep the schema, templates, notices, checker and its feature
 file identical to Mission Control. Do not patch them locally. The checked-in
 script validates the installed snapshot against the lock; Mission Control also
 compares it with the selected source bundle.
