@@ -21,3 +21,6 @@ morphir-ir.json
 .metals/
 .settings.json
 
+
+# Shared OpenSpec checker build cache
+/scripts/_build/

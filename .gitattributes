@@ -1,0 +1,7 @@
+
+
+# Keep hash-locked OpenSpec payloads byte-identical on every platform.
+openspec/schemas/html-design/** text eol=lf
+openspec/extensions.lock.json text eol=lf
+scripts/openspec-ext.mbtx text eol=lf
+scripts/features/openspec_ext.feature text eol=lf
