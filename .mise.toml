@@ -1,5 +1,5 @@
 [tools]
-"npm:@fission-ai/openspec" = "1.14.3"
+"npm:@fission-ai/openspec" = "1.16.0"
 node = "24"
 elm = "0.19.2"
 actionlint = "1.7.12"
