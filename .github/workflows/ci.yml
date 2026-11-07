@@ -39,12 +39,11 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-elm-
       
-    # The mise postinstall hook completes the pinned MoonBit SDK (core and moonx).
-    - name: Initialize the MoonBit package registry
-      run: mise exec -- moon update
+    - name: Check the shared OpenSpec bundle
+      run: mission-control-tools openspec check --bundle
 
-    - name: Verify shared OpenSpec workflow
-      run: mise run openspec:verify
+    - name: Validate OpenSpec schema and changes
+      run: mise run openspec:validate
 
     - name: Check code formatting
       run: mise run format-check
