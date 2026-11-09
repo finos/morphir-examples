@@ -205,7 +205,7 @@ description = "Clean all build outputs"
 depends = ["clean-npm", "clean-elm", "clean-morphir"]
 
 [tools."github:moonrockz/mission-control"]
-version = "0.1.0"
+version = "0.1.2"
 version_prefix = "tools-v"
 
 [tools."github:moonrockz/mission-control".platforms]
