@@ -9,7 +9,7 @@ recorded schema. Follow this repository's contribution and approval rules.
 ## Bootstrap
 
 Install [mise](https://mise.jdx.dev/), then run `mise install`. OpenSpec is pinned
-to 1.14.3. The pinned `mission-control-tools` 0.1.0 binary from
+to 2.2.0. The pinned `mission-control-tools` 0.1.3 binary from
 [Mission Control](https://github.com/moonrockz/mission-control/tree/main/apps/tools)
 checks the shared bundle and generates the agent skills. It is a released
 binary, so this repository needs no MoonBit toolchain. Existing project runtime
@@ -34,9 +34,14 @@ mise exec -- openspec instructions design --change <change-name>
 
 No schema override is needed. The design instructions target `design.html`.
 Use the generated core skills to propose, explore, apply, update, sync specs and
-archive changes. Skills are checked in for portable/Codex agents, Claude,
-Copilot, Cursor, Grok, Gemini and OpenCode. `mise run openspec:setup` regenerates
-them using an isolated core profile without changing personal OpenSpec settings.
+archive changes. The `openspec` skill answers questions about OpenSpec and
+sends a request to the skill that does the work. The skills are checked in once,
+in `.agents/skills/`, which Codex, Copilot, Cursor, Gemini and OpenCode read.
+`.claude/skills/` and `.grok/skills/` hold links to them. On Windows, run
+`git config --global core.symlinks true` before you clone, or each link checks
+out as a small text file. `mise run openspec:setup` regenerates the skills in
+this repository using an isolated core profile without changing personal
+OpenSpec settings.
 
 Keep project-specific context and rules in `openspec/config.yaml` and AGENTS.md.
 Existing skills outside the generated OpenSpec set are preserved.
@@ -62,7 +67,7 @@ The installer refuses local edits to owned files before it writes anything. It
 writes the lock last. `openspec check --bundle` fails when the lock version and
 the installed tool version differ, so a version change without `install` fails
 CI. See the
-[mission-control-tools guide](https://github.com/moonrockz/mission-control/blob/tools-v0.1.0/apps/tools/README.md)
+[mission-control-tools guide](https://github.com/moonrockz/mission-control/blob/tools-v0.1.3/apps/tools/README.md)
 for the commands and their messages.
 
 The schema's Apache-2.0 license and upstream OpenSpec MIT notice are retained in
